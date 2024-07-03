@@ -1,262 +1,334 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
+import React, { useState } from 'react';
 import './dendrologyForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import FormRow from './fomRow';
+import FormGroup from './formGroup';
+import TextInput from './textInput';
+import SelectInput from './selectInput';
+import FormButton from './formButton';
+import MapContainer from './mapContainer';
 
 function DendrologyForm() {
+  const [formState, setFormState] = useState({
+    inventoryNumber: '',
+    family: '',
+    genus: '',
+    species: '',
+    synonyms: '',
+    sort: '',
+    form: '',
+    location: '',
+    latitude: '',
+    longitude: '',
+    plantOrigin: '',
+    naturalHabitat: '',
+    determined: '',
+    ecologyBiology: '',
+    economicUse: '',
+    dateOfPlanting: '',
+    originator: '',
+    date: '',
+    country: '',
+    protectionStatus: '',
+    herbariumPresence: false,
+    filledOut: '',
+    illustration: '',
+    duplicates: '',
+    sampleState: '',
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormState({
+      ...formState,
+      [name]: type === 'checkbox' ? checked : value,
+    });
+  };
+
+  const familyOptions = [{ value: '', label: 'Нет данных' }];
+  const genusOptions = [{ value: '', label: 'Нет данных' }];
+  const locationOptions = [{ value: '', label: 'Нет данных' }];
+
   return (
     <div className="container">
       <h1 id="departmentName" className="mt-4">
         Выбран отдел: Ботанический сад
       </h1>
       <form id="plantForm">
-        <div className="form-row">
-          <div className="form-group col-md-6">
-            <label htmlFor="inventoryNumber">Инв_номер</label>
-            <input
-              type="text"
-              className="form-control"
+        <FormRow>
+          <FormGroup label="Инв_номер" htmlFor="inventoryNumber" colSize={6}>
+            <TextInput
               id="inventoryNumber"
-              name="InventorNumber"
+              name="inventoryNumber"
+              value={formState.inventoryNumber}
+              onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="family">Семейство</label>
-            <select id="family" className="form-control" name="FamilyId">
-              <option>Нет данных</option>
-            </select>
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group col-md-6">
-            <label htmlFor="genus">Род</label>
-            <select id="genus" className="form-control" name="GenusId">
-              <option>Нет данных</option>
-            </select>
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="species">Вид</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+          <FormGroup label="Семейство" htmlFor="family" colSize={6}>
+            <SelectInput
+              id="family"
+              name="family"
+              value={formState.family}
+              onChange={handleInputChange}
+              options={familyOptions}
+            />
+          </FormGroup>
+        </FormRow>
+        <FormRow>
+          <FormGroup label="Род" htmlFor="genus" colSize={6}>
+            <SelectInput
+              id="genus"
+              name="genus"
+              value={formState.genus}
+              onChange={handleInputChange}
+              options={genusOptions}
+            />
+          </FormGroup>
+          <FormGroup label="Вид" htmlFor="species" colSize={6}>
+            <TextInput
               id="species"
-              name="Species"
+              name="species"
+              value={formState.species}
+              onChange={handleInputChange}
             />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group col-md-6">
-            <label htmlFor="synonyms">Синонимы</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+        </FormRow>
+        <FormRow>
+          <FormGroup label="Синонимы" htmlFor="synonyms" colSize={6}>
+            <TextInput
               id="synonyms"
-              name="Synonyms"
+              name="synonyms"
+              value={formState.synonyms}
+              onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="sort">Сорт</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+          <FormGroup label="Сорт" htmlFor="sort" colSize={6}>
+            <TextInput
               id="sort"
-              name="Variety"
+              name="sort"
+              value={formState.sort}
+              onChange={handleInputChange}
             />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group col-md-6">
-            <label htmlFor="form">Форма</label>
-            <input type="text" className="form-control" id="form" name="Form" />
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="location">Местоположение на территории сада</label>
-            <select id="location" className="form-control" name="LocationId">
-              <option>Нет данных</option>
-            </select>
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group col-md-6">
-            <label htmlFor="latitude">Широта</label>
-            <input
-              type="text"
-              className="form-control"
-              id="latitude"
-              name="Latitude"
+          </FormGroup>
+        </FormRow>
+        <FormRow>
+          <FormGroup label="Форма" htmlFor="form" colSize={6}>
+            <TextInput
+              id="form"
+              name="form"
+              value={formState.form}
+              onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="longitude">Долгота</label>
-            <input
-              type="text"
-              className="form-control"
-              id="longitude"
-              name="Longitude"
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <button
-            id="toggle-map-btn"
-            className="btn btn-info mb-3"
-            type="button"
+          </FormGroup>
+          <FormGroup
+            label="Местоположение на территории сада"
+            htmlFor="location"
+            colSize={6}
           >
-            Показать/Скрыть карту
-          </button>
-          <div id="map-container" className="mb-3">
-            <div id="map" style={{ height: '400px' }} />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group col-md-6">
-            <label htmlFor="plantOrigin">Происхождение образца</label>
-            <input
-              type="text"
-              className="form-control"
+            <SelectInput
+              id="location"
+              name="location"
+              value={formState.location}
+              onChange={handleInputChange}
+              options={locationOptions}
+            />
+          </FormGroup>
+        </FormRow>
+        <FormRow>
+          <FormGroup colSize={6} label="Широта" htmlFor="latitude">
+            <TextInput
+              id="latitude"
+              name="latitude"
+              value={formState.latitude}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+          <FormGroup colSize={6} label="Долгота" htmlFor="longitude">
+            <TextInput
+              id="longitude"
+              name="longitude"
+              value={formState.longitude}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+        </FormRow>
+        <FormButton
+          id="toggle-map-btn"
+          className="btn btn-info mb-3"
+          type="button"
+        >
+          Показать/Скрыть карту
+        </FormButton>
+        <MapContainer id="map-container" height="400px" />
+        <FormRow>
+          <FormGroup
+            label="Происхождение образца"
+            htmlFor="plantOrigin"
+            colSize={6}
+          >
+            <TextInput
               id="plantOrigin"
-              name="PlantOrigin"
+              name="plantOrigin"
+              value={formState.plantOrigin}
+              onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="naturalHabitat">Природный ареал</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+          <FormGroup
+            label="Природный ареал"
+            htmlFor="naturalHabitat"
+            colSize={6}
+          >
+            <TextInput
               id="naturalHabitat"
-              name="NaturalHabitat"
+              name="naturalHabitat"
+              value={formState.naturalHabitat}
+              onChange={handleInputChange}
             />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group col-md-6">
-            <label htmlFor="determined">Определитель</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+        </FormRow>
+        <FormRow>
+          <FormGroup label="Определитель" htmlFor="determined" colSize={6}>
+            <TextInput
               id="determined"
-              name="Determined"
+              name="determined"
+              value={formState.determined}
+              onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="ecologyBiology">Экология и биология вида</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+          <FormGroup
+            label="Экология и биология вида"
+            htmlFor="ecologyBiology"
+            colSize={6}
+          >
+            <TextInput
               id="ecologyBiology"
-              name="EcologyBiology"
+              name="ecologyBiology"
+              value={formState.ecologyBiology}
+              onChange={handleInputChange}
             />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group col-md-6">
-            <label htmlFor="economicUse">Хозяйственное применение</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+        </FormRow>
+        <FormRow>
+          <FormGroup
+            label="Хозяйственное применение"
+            htmlFor="economicUse"
+            colSize={6}
+          >
+            <TextInput
               id="economicUse"
-              name="EconomicUse"
+              name="economicUse"
+              value={formState.economicUse}
+              onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="dateOfPlanting">Год посадки</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+          <FormGroup label="Год посадки" htmlFor="dateOfPlanting" colSize={6}>
+            <TextInput
               id="dateOfPlanting"
-              name="DateOfPlanting"
+              name="dateOfPlanting"
+              value={formState.dateOfPlanting}
+              onChange={handleInputChange}
             />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group col-md-4">
-            <label htmlFor="originator">Оригинатор</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+        </FormRow>
+        <FormRow>
+          <FormGroup label="Оригинатор" htmlFor="originator" colSize={4}>
+            <TextInput
               id="originator"
-              name="Originator"
+              name="originator"
+              value={formState.originator}
+              onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group col-md-4">
-            <label htmlFor="date">Год</label>
-            <input type="text" className="form-control" id="date" name="Date" />
-          </div>
-          <div className="form-group col-md-4">
-            <label htmlFor="country">Страна</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+          <FormGroup label="Год" htmlFor="date" colSize={4}>
+            <TextInput
+              id="date"
+              name="date"
+              value={formState.date}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+          <FormGroup label="Страна" htmlFor="country" colSize={4}>
+            <TextInput
               id="country"
-              name="Country"
+              name="country"
+              value={formState.country}
+              onChange={handleInputChange}
             />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group col-md-4">
-            <label htmlFor="protectionStatus">Охраняемый статус вида</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+        </FormRow>
+        <FormRow>
+          <FormGroup
+            label="Охраняемый статус вида"
+            htmlFor="protectionStatus"
+            colSize={4}
+          >
+            <TextInput
               id="protectionStatus"
-              name="ProtectionStatus"
+              name="protectionStatus"
+              value={formState.protectionStatus}
+              onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group col-md-4">
-            <label htmlFor="herbariumPresence">Наличие гербария</label>
+          </FormGroup>
+          <FormGroup
+            label="Наличие гербария"
+            htmlFor="herbariumPresence"
+            colSize={4}
+          >
             <input
               type="checkbox"
-              className="form-control"
+              className="form-check-input"
               id="herbariumPresence"
-              name="HerbariumPresence"
+              name="herbariumPresence"
+              checked={formState.herbariumPresence}
+              onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group col-md-4">
-            <label htmlFor="filledOut">Заполнял</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+          <FormGroup label="Заполнял" htmlFor="filledOut" colSize={4}>
+            <TextInput
               id="filledOut"
-              name="FilledOut"
-              value="Лебедев А.Н."
+              name="filledOut"
+              value={formState.filledOut}
+              readOnly
             />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group col-md-6">
-            <label htmlFor="illustration">Иллюстрация</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+        </FormRow>
+        <FormRow>
+          <FormGroup label="Иллюстрация" htmlFor="illustration" colSize={6}>
+            <TextInput
               id="illustration"
-              name="ImagePath"
+              name="illustration"
+              value={formState.illustration}
+              onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group col-md-6">
-            <label htmlFor="duplicates">
-              Наличие дубликатов в других гербариях
-            </label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+          <FormGroup
+            label="Наличие дубликатов в других гербариях"
+            htmlFor="duplicates"
+            colSize={6}
+          >
+            <TextInput
               id="duplicates"
-              name="HerbariumDuplicate"
+              name="duplicates"
+              value={formState.duplicates}
+              onChange={handleInputChange}
             />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group col-md-12">
-            <label htmlFor="sampleState">Состояние образца</label>
-            <input
-              type="text"
-              className="form-control"
+          </FormGroup>
+        </FormRow>
+        <FormRow>
+          <FormGroup
+            label="Состояние образца"
+            htmlFor="sampleState"
+            colSize={12}
+          >
+            <TextInput
               id="sampleState"
-              name="Note"
-              value="уд"
+              name="sampleState"
+              value={formState.sampleState}
+              onChange={handleInputChange}
             />
-          </div>
-        </div>
+          </FormGroup>
+        </FormRow>
       </form>
     </div>
   );

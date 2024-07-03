@@ -1,4 +1,4 @@
-.mainFooter {
+footer {
   background-color: #343a40;
   color: white;
   text-align: center;
@@ -7,14 +7,14 @@
   bottom: 0;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
-  position: absolute;
+  position: relative;
 }
 
-.mainFooter a {
+footer a {
   color: #3cb371;
   text-decoration: none;
 }
 
-.mainFooter a:hover {
+footer a:hover {
   text-decoration: underline;
 }

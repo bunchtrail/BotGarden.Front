@@ -1,10 +1,10 @@
 //  Footer.jsx
 import React from 'react';
-import './Footer.css';
+import './sectionsFooter.css';
 
-function Footer() {
+function sectionsFooter() {
   return (
-    <footer className="mainFooter">
+    <footer>
       <p>
         Контакты: <a href="mailto:loleenko@vk.com">loleenko@vk.com</a>
       </p>
@@ -12,4 +12,4 @@ function Footer() {
   );
 }
 
-export default Footer;
+export default sectionsFooter;
