@@ -1,6 +1,9 @@
+//  Home.jsx
+
 import React from 'react';
 import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
+import Button from '../components/Button/Button';
 
 function Home() {
   return (
@@ -10,21 +13,15 @@ function Home() {
         <h1>Выбор отдела</h1>
         <p>Выберите отдел для дальнейшей работы:</p>
         <div className="btn-group">
-          <a href="/Dendrology/Index">
-            <button type="button" className="btn btn-primary">
-              <i className="fas fa-tree" /> Дендрология
-            </button>
-          </a>
-          <a href="/Flora/Index">
-            <button type="button" className="btn btn-primary">
-              <i className="fas fa-leaf" /> Флора
-            </button>
-          </a>
-          <a href="/Floriculture/Index">
-            <button type="button" className="btn btn-primary">
-              <i className="fas fa-seedling" /> Цветоводство
-            </button>
-          </a>
+          <Button href="/Dendrology/Index" iconClass="fas fa-tree">
+            Дендрология
+          </Button>
+          <Button href="/Flora/Index" iconClass="fas fa-leaf">
+            Флора
+          </Button>
+          <Button href="/Floriculture/Index" iconClass="fas fa-seedling">
+            Цветоводство
+          </Button>
         </div>
       </div>
       <Footer />
