@@ -23,7 +23,7 @@ module.exports = {
         bracketSpacing: true,
         jsxBracketSameLine: false,
         arrowParens: 'always',
-        endOfLine: 'CRLF',
+        endOfLine: 'crlf',
       },
     ],
     'react/react-in-jsx-scope': 'off',
@@ -36,4 +36,3 @@ module.exports = {
     },
   },
 };
-
