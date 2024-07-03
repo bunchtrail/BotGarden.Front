@@ -6,6 +6,8 @@ import Dendrology from './pages/Dendrology';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './styles/App.css';
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />;
+
 function App() {
   return (
     <div className="page-container">

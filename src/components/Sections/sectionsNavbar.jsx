@@ -1,17 +1,23 @@
-/* eslint-disable react/button-has-type */
-// src/components/Navbar/sectionsNavbar.jsx
-
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import './sectionsNavbar.css';
+import '../../assets/css/sectionsNavbar.css';
+import saveData from '../../assets/js/saveData'; // Импорт по умолчанию
+import { FormContext } from '../../assets/js/FormContext';
 
 function SectionNavbar() {
+  const { formState } = useContext(FormContext);
+
   return (
     <div id="navbar" className="rounded-navbar fixed-top">
       <Link to="/" className="nav-item">
         <i className="fas fa-home" /> Вернуться на главный экран
       </Link>
-      <button id="btn-Add" className="btn btn-warning">
+      <button
+        id="btn-Add"
+        className="btn btn-warning"
+        type="button"
+        onClick={() => saveData(formState)}
+      >
         <i className="fas fa-save" /> Сохранить
       </button>
     </div>
