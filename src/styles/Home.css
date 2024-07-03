@@ -21,19 +21,24 @@ p {
 }
 
 .btn {
-  padding: 10px 20px;
+  padding: 10px 40px; /* Увеличим внутренние отступы для более круглого вида */
   border: none;
-  border-radius: 20px;
+  border-radius: 30px; /* Радиус для круглого вида */
   color: white;
   text-align: center;
   text-decoration: none;
   font-size: 16px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn:hover {
-  transform: scale(1.05);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn-primary {
@@ -46,11 +51,11 @@ p {
 
 @media (max-width: 768px) {
   .btn-group {
-      flex-direction: column;
+    flex-direction: column;
   }
 
   .btn {
-      width: 90%;
-      margin: 5px 0;
+    width: 90%;
+    margin: 5px 0;
   }
 }

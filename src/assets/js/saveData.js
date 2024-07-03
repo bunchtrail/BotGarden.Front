@@ -1,36 +1,28 @@
 export default async function saveData(formState) {
   const formData = new FormData();
+
   Object.keys(formState).forEach((key) => {
     let value = formState[key];
     if (value === undefined || value === null) {
       value = ' ';
     }
-    // Конвертация boolean значений в строку
-    if (typeof value === 'boolean') {
+    if (typeof value === 'boolean' || typeof value === 'number') {
       value = value.toString();
     }
-
-    // Конвертация числовых значений в строку
-    if (typeof value === 'number') {
-      value = value.toString();
-    }
-
     formData.append(key, value);
   });
 
-  // Parse latitude and longitude
-  const latitude = 115; // Здесь должен быть код для получения значений широты и долготы из формы
-  const longitude = 223;
+  const latitude = parseFloat(formState.Latitude).toString().replace('.', ',');
+  const longitude = parseFloat(formState.Longitude)
+    .toString()
+    .replace('.', ',');
 
-  // Validate latitude and longitude
-  if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
-    console.error('Please select the correct location on the map.');
-    return;
-  }
+  formData.set('Latitude', latitude);
+  formData.set('Longitude', longitude);
 
-  // Add latitude and longitude to formData
-  formData.set('Latitude', latitude.toString().replace(',', '.'));
-  formData.set('Longitude', longitude.toString().replace(',', '.'));
+  // Убедимся, что широта и долгота отправляются как строки
+  formData.set('Latitude', latitude);
+  formData.set('Longitude', longitude);
 
   // Append additional fields
   formData.append('SectorId', '1');
@@ -41,7 +33,7 @@ export default async function saveData(formState) {
     console.log(`${key}: ${value} (Type: ${typeof value})`);
   });
 
-  console.log('Sending data to the server...', formState);
+  console.log('Sending data to the server...', formData);
 
   try {
     const response = await fetch(
@@ -65,11 +57,10 @@ export default async function saveData(formState) {
       document
         .querySelectorAll('input, select, textarea')
         .forEach((element) => {
-          if (element.type === 'checkbox' || element.type === 'radio') {
-            const el = element;
-            el.checked = false; // Изменено на корректный сброс состояния чекбоксов и радио кнопок
+          const el = element;
+          if (el.type === 'checkbox' || el.type === 'radio') {
+            el.checked = false;
           } else {
-            const el = element;
             el.value = '';
           }
         });

@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../Button/Button';
+import Button from '../Button/ButtonHref';
 
 function ButtonGroup() {
   return (
@@ -7,10 +7,10 @@ function ButtonGroup() {
       <Button href="/dendrology" iconClass="fas fa-tree">
         Дендрология
       </Button>
-      <Button href="/Flora/Index" iconClass="fas fa-leaf">
+      <Button href="/flora" iconClass="fas fa-leaf">
         Флора
       </Button>
-      <Button href="/Floriculture/Index" iconClass="fas fa-seedling">
+      <Button href="/floriculture" iconClass="fas fa-seedling">
         Цветоводство
       </Button>
     </div>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import '../../../assets/css/dendrologyForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import FormRow from './formRow';
@@ -7,21 +7,26 @@ import TextInput from './textInput';
 import SelectInput from './selectInput';
 import { FormContext } from '../../../assets/js/FormContext';
 import MapComponent from '../../../assets/js/mapComponent';
+import Button from '../../Buttons/Button/ButtonClick';
+// import saveData from '../../../assets/js/saveData';
 
 export default function DendrologyForm() {
-  const { formState, handleInputChange, setFormState } =
+  const { formState, handleInputChange, setLatitude, setLongitude } =
     useContext(FormContext);
+  const [showMap, setShowMap] = useState(false);
+
+  const toggleMap = () => {
+    setShowMap(!showMap);
+  };
 
   const familyOptions = [{ value: '', label: 'Нет данных' }];
   const genusOptions = [{ value: '', label: 'Нет данных' }];
   const locationOptions = [{ value: '', label: 'Нет данных' }];
-  const setLatitude = (latitude) => {
-    setFormState({ ...formState, Latitude: latitude });
-  };
 
-  const setLongitude = (longitude) => {
-    setFormState({ ...formState, Longitude: longitude });
-  };
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   await saveData(formState);
+  // };
 
   return (
     <div className="container">
@@ -114,7 +119,7 @@ export default function DendrologyForm() {
               id="Latitude"
               name="Latitude"
               value={formState.Latitude}
-              onChange={handleInputChange}
+              onChange={(e) => setLatitude(parseFloat(e.target.value))}
             />
           </FormGroup>
           <FormGroup colSize={6} label="Долгота" htmlFor="Longitude">
@@ -122,9 +127,24 @@ export default function DendrologyForm() {
               id="Longitude"
               name="Longitude"
               value={formState.Longitude}
-              onChange={handleInputChange}
+              onChange={(e) => setLongitude(parseFloat(e.target.value))}
             />
           </FormGroup>
+        </FormRow>
+        <FormRow>
+          <div style={{ width: '100%' }}>
+            <Button onClick={toggleMap} iconClass="fas fa-map">
+              {showMap ? 'Скрыть карту' : 'Показать карту'}
+            </Button>
+            <div className={`map-container ${showMap ? 'show' : 'hide'}`}>
+              <MapComponent
+                latitude={formState.Latitude}
+                longitude={formState.Longitude}
+                setLatitude={setLatitude}
+                setLongitude={setLongitude}
+              />
+            </div>
+          </div>
         </FormRow>
         <FormRow>
           <FormGroup
@@ -290,16 +310,6 @@ export default function DendrologyForm() {
               onChange={handleInputChange}
             />
           </FormGroup>
-        </FormRow>
-        <FormRow>
-          <div style={{ width: '100%' }}>
-            <MapComponent
-              latitude={formState.Latitude}
-              longitude={formState.Longitude}
-              setLatitude={setLatitude}
-              setLongitude={setLongitude}
-            />
-          </div>
         </FormRow>
       </form>
     </div>

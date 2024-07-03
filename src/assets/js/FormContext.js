@@ -39,9 +39,23 @@ export function FormProvider({ children }) {
     }));
   }, []);
 
+  const setLatitude = useCallback((lat) => {
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      Latitude: lat,
+    }));
+  }, []);
+
+  const setLongitude = useCallback((lng) => {
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      Longitude: lng,
+    }));
+  }, []);
+
   const contextValue = useMemo(
-    () => ({ formState, handleInputChange }),
-    [formState, handleInputChange]
+    () => ({ formState, handleInputChange, setLatitude, setLongitude }),
+    [formState, handleInputChange, setLatitude, setLongitude]
   );
 
   return (

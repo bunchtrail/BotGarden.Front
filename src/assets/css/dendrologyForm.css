@@ -45,12 +45,22 @@ input[type='text'] {
   border-radius: 3px;
 }
 
-#map-container {
-  transition: max-height 0.5s ease-out;
+/* dendrologyForm.css */
+.map-container {
+  transition:
+    max-height 0.5s ease-in-out,
+    opacity 0.5s ease-in-out;
   overflow: hidden;
   max-height: 0;
+  opacity: 0;
 }
 
-#map-container.active {
-  max-height: 500px;
+.map-container.show {
+  max-height: 500px; /* Достаточное значение, чтобы вместить карту */
+  opacity: 1;
+}
+
+.map-container.hide {
+  max-height: 0;
+  opacity: 0;
 }
