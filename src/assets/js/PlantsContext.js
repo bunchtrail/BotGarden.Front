@@ -27,11 +27,52 @@ export function PlantsProvider({ children, sectorId }) {
     }
   }, [sectorId]);
 
+  const updatePlants = useCallback(
+    async (plantUpdates) => {
+      try {
+        const response = await fetch(
+          'https://localhost:7076/api/dendrology/update',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(plantUpdates),
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        if (result.success) {
+          const updatedPlants = plants.map((plant) => {
+            const update = plantUpdates.find(
+              (p) => p.PlantId === plant.PlantId
+            );
+            return update ? { ...plant, ...update } : plant;
+          });
+          setPlants(updatedPlants);
+        } else {
+          console.error('Error updating plants:', result.message);
+        }
+      } catch (error) {
+        console.error('An error occurred while updating the plants:', error);
+      }
+    },
+    [plants]
+  );
+
   useEffect(() => {
     fetchPlants();
   }, [fetchPlants]);
 
-  const value = useMemo(() => ({ plants }), [plants]);
+  const value = useMemo(
+    () => ({
+      plants,
+      updatePlants,
+    }),
+    [plants, updatePlants]
+  );
 
   return (
     <PlantsContext.Provider value={value}>{children}</PlantsContext.Provider>

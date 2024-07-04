@@ -4,14 +4,22 @@ import ButtonClick from '../../Buttons/Button/ButtonClick';
 import { PlantsContext } from '../../../assets/js/PlantsContext';
 
 function SearchFilter() {
-  const { saveData } = useContext(PlantsContext);
+  const { updatePlants } = useContext(PlantsContext);
 
   const handleUpdate = () => {
     console.log('Update clicked');
-    const formState = {}; // Заполните данными, которые хотите сохранить
-    saveData(formState);
+    const plantUpdates = []; // Соберите данные, которые хотите отправить на сервер
+    document.querySelectorAll('tr[data-plant-id]').forEach((row) => {
+      const plantId = parseInt(row.getAttribute('data-plant-id'), 10);
+      const formState = {};
+      row.querySelectorAll('input').forEach((input) => {
+        const { name, value, type, checked } = input;
+        formState[name] = type === 'checkbox' ? checked : value;
+      });
+      plantUpdates.push({ PlantId: plantId, ...formState });
+    });
+    updatePlants(plantUpdates);
   };
-
   const handleDelete = () => {
     console.log('Delete clicked');
   };

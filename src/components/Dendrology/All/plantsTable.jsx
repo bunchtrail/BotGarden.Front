@@ -1,20 +1,33 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 // components/Dendrology/PlantsTable.jsx
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { PlantsContext } from '../../../assets/js/PlantsContext';
 import '../../../assets/css/plantsTable.css';
 
 function PlantsTable() {
   const { plants } = useContext(PlantsContext);
-  console.log(plants);
+  const [editedPlants, setEditedPlants] = useState([]);
 
-  // Проверка для исключения ошибки при отсутствии данных
+  useEffect(() => {
+    setEditedPlants(plants.map((plant) => ({ ...plant })));
+  }, [plants]);
+
+  const handleInputChange = (event, plantId) => {
+    const { name, value, type, checked } = event.target;
+    setEditedPlants((prevState) =>
+      prevState.map((plant) =>
+        plant.plantId === plantId
+          ? { ...plant, [name]: type === 'checkbox' ? checked : value }
+          : plant
+      )
+    );
+  };
+
   if (!plants || !Array.isArray(plants)) {
     return <div>Данные не найдены</div>;
   }
 
-  // Фильтрация растений по SectorId для Дендрологии (например, SectorId = 1)
-  const filteredPlants = plants.filter((plant) => plant.sectorId === 1);
+  const filteredPlants = editedPlants.filter((plant) => plant.sectorId === 1);
 
   return (
     <div className="table-responsive">
@@ -71,226 +84,225 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.inventorNumber || ''}
                   value={plant.inventorNumber || ''}
-                  name="InventorNumber"
+                  name="inventorNumber"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.family?.familyName || ''}
                   value={plant.family?.familyName || ''}
-                  name="FamilyName"
+                  name="familyName"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.genus?.genusName || ''}
                   value={plant.genus?.genusName || ''}
-                  name="GenusName"
+                  name="genusName"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.species || ''}
                   value={plant.species || ''}
-                  name="Species"
+                  name="species"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.synonyms || ''}
                   value={plant.synonyms || ''}
-                  name="Synonyms"
+                  name="synonyms"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.variety || ''}
                   value={plant.variety || ''}
-                  name="Variety"
+                  name="variety"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.form || ''}
                   value={plant.form || ''}
-                  name="Form"
+                  name="form"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.sector?.sectorName || ''}
                   value={plant.sector?.sectorName || ''}
-                  name="SectorName"
+                  name="sectorName"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.plantOrigin || ''}
                   value={plant.plantOrigin || ''}
-                  name="PlantOrigin"
+                  name="plantOrigin"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.naturalHabitat || ''}
                   value={plant.naturalHabitat || ''}
-                  name="NaturalHabitat"
+                  name="naturalHabitat"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.determined || ''}
                   value={plant.determined || ''}
-                  name="Determined"
+                  name="determined"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.ecologyBiology || ''}
                   value={plant.ecologyBiology || ''}
-                  name="EcologyBiology"
+                  name="ecologyBiology"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.economicUse || ''}
                   value={plant.economicUse || ''}
-                  name="EconomicUse"
+                  name="economicUse"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.dateOfPlanting || ''}
                   value={plant.dateOfPlanting || ''}
-                  name="DateOfPlanting"
+                  name="dateOfPlanting"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.originator || ''}
                   value={plant.originator || ''}
-                  name="Originator"
+                  name="originator"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.date || ''}
                   value={plant.date || ''}
-                  name="Date"
+                  name="date"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.country || ''}
                   value={plant.country || ''}
-                  name="Country"
+                  name="country"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.protectionStatus || ''}
                   value={plant.protectionStatus || ''}
-                  name="ProtectionStatus"
+                  name="protectionStatus"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="checkbox"
                   className="input-field"
-                  data-initial-value={plant.herbariumPresence}
                   checked={plant.herbariumPresence || false}
-                  name="HerbariumPresence"
-                  readOnly
+                  name="herbariumPresence"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.filledOut || ''}
                   value={plant.filledOut || ''}
-                  name="FilledOut"
+                  name="filledOut"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.imagePath || ''}
                   value={plant.imagePath || ''}
-                  name="ImagePath"
+                  name="imagePath"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.herbariumDuplicate || ''}
                   value={plant.herbariumDuplicate || ''}
-                  name="HerbariumDuplicate"
+                  name="herbariumDuplicate"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.note || ''}
                   value={plant.note || ''}
-                  name="Note"
+                  name="note"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.latitude || ''}
                   value={plant.latitude || ''}
-                  name="Latitude"
+                  name="latitude"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
               <td>
                 <input
                   type="text"
                   className="input-field"
-                  data-initial-value={plant.longitude || ''}
                   value={plant.longitude || ''}
-                  name="Longitude"
+                  name="longitude"
+                  onChange={(e) => handleInputChange(e, plant.plantId)}
                 />
               </td>
             </tr>
