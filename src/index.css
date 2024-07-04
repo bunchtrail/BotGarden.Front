@@ -1,16 +1,8 @@
-/* src/styles/Home.css */
-.homeContainer {
-  padding: 20px;
-  text-align: center;
-}
-
-h1 {
-  color: #343a40;
-  margin-top: 20px;
-}
-
-p {
-  color: #343a40;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
 }
 
 .btn-group {
@@ -47,15 +39,4 @@ p {
 
 .btn-primary:hover {
   background-color: #2e8b57;
-}
-
-@media (max-width: 768px) {
-  .btn-group {
-    flex-direction: column;
-  }
-
-  .btn {
-    width: 90%;
-    margin: 5px 0;
-  }
 }
