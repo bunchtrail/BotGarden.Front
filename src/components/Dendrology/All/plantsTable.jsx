@@ -1,40 +1,20 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 // components/Dendrology/PlantsTable.jsx
-import React from 'react';
+import React, { useContext } from 'react';
+import { PlantsContext } from '../../../assets/js/PlantsContext';
+import '../../../assets/css/plantsTable.css';
 
 function PlantsTable() {
-  // Заглушка для данных растений
-  const plants = [
-    {
-      PlantId: 1,
-      InventorNumber: 'INV123',
-      FamilyName: 'Rosaceae',
-      GenusName: 'Rosa',
-      Species: 'R. chinensis',
-      Synonyms: 'China Rose',
-      Variety: 'Variety 1',
-      Form: 'Shrub',
-      SectorName: 'Sector 1',
-      PlantOrigin: 'China',
-      NaturalHabitat: 'Forests',
-      Determined: 'Dr. Smith',
-      EcologyBiology: 'Perennial',
-      EconomicUse: 'Ornamental',
-      DateOfPlanting: '2021',
-      Originator: 'Dr. Smith',
-      Date: '2021',
-      Country: 'China',
-      ProtectionStatus: 'Endangered',
-      HerbariumPresence: true,
-      FilledOut: 'Dr. Smith',
-      ImagePath: 'path/to/image.jpg',
-      HerbariumDuplicate: 'Yes',
-      Note: 'Healthy',
-      Latitude: '34.0522',
-      Longitude: '-118.2437',
-    },
-    // Добавьте больше объектов растений по мере необходимости
-  ];
+  const { plants } = useContext(PlantsContext);
+  console.log(plants);
+
+  // Проверка для исключения ошибки при отсутствии данных
+  if (!plants || !Array.isArray(plants)) {
+    return <div>Данные не найдены</div>;
+  }
+
+  // Фильтрация растений по SectorId для Дендрологии (например, SectorId = 1)
+  const filteredPlants = plants.filter((plant) => plant.sectorId === 1);
 
   return (
     <div className="table-responsive">
@@ -73,8 +53,8 @@ function PlantsTable() {
           </tr>
         </thead>
         <tbody>
-          {plants.map((plant) => (
-            <tr key={plant.PlantId} data-plant-id={plant.PlantId}>
+          {filteredPlants.map((plant) => (
+            <tr key={plant.plantId} data-plant-id={plant.plantId}>
               <td>
                 <i className="fas fa-check select-row-icon" />
               </td>
@@ -82,7 +62,7 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.PlantId}
+                  value={plant.plantId || ''}
                   name="PlantId"
                   disabled
                 />
@@ -91,7 +71,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.InventorNumber}
+                  data-initial-value={plant.inventorNumber || ''}
+                  value={plant.inventorNumber || ''}
                   name="InventorNumber"
                 />
               </td>
@@ -99,7 +80,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.FamilyName}
+                  data-initial-value={plant.family?.familyName || ''}
+                  value={plant.family?.familyName || ''}
                   name="FamilyName"
                 />
               </td>
@@ -107,7 +89,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.GenusName}
+                  data-initial-value={plant.genus?.genusName || ''}
+                  value={plant.genus?.genusName || ''}
                   name="GenusName"
                 />
               </td>
@@ -115,7 +98,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.Species}
+                  data-initial-value={plant.species || ''}
+                  value={plant.species || ''}
                   name="Species"
                 />
               </td>
@@ -123,7 +107,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.Synonyms}
+                  data-initial-value={plant.synonyms || ''}
+                  value={plant.synonyms || ''}
                   name="Synonyms"
                 />
               </td>
@@ -131,7 +116,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.Variety}
+                  data-initial-value={plant.variety || ''}
+                  value={plant.variety || ''}
                   name="Variety"
                 />
               </td>
@@ -139,7 +125,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.Form}
+                  data-initial-value={plant.form || ''}
+                  value={plant.form || ''}
                   name="Form"
                 />
               </td>
@@ -147,7 +134,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.SectorName}
+                  data-initial-value={plant.sector?.sectorName || ''}
+                  value={plant.sector?.sectorName || ''}
                   name="SectorName"
                 />
               </td>
@@ -155,7 +143,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.PlantOrigin}
+                  data-initial-value={plant.plantOrigin || ''}
+                  value={plant.plantOrigin || ''}
                   name="PlantOrigin"
                 />
               </td>
@@ -163,7 +152,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.NaturalHabitat}
+                  data-initial-value={plant.naturalHabitat || ''}
+                  value={plant.naturalHabitat || ''}
                   name="NaturalHabitat"
                 />
               </td>
@@ -171,7 +161,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.Determined}
+                  data-initial-value={plant.determined || ''}
+                  value={plant.determined || ''}
                   name="Determined"
                 />
               </td>
@@ -179,7 +170,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.EcologyBiology}
+                  data-initial-value={plant.ecologyBiology || ''}
+                  value={plant.ecologyBiology || ''}
                   name="EcologyBiology"
                 />
               </td>
@@ -187,7 +179,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.EconomicUse}
+                  data-initial-value={plant.economicUse || ''}
+                  value={plant.economicUse || ''}
                   name="EconomicUse"
                 />
               </td>
@@ -195,7 +188,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.DateOfPlanting}
+                  data-initial-value={plant.dateOfPlanting || ''}
+                  value={plant.dateOfPlanting || ''}
                   name="DateOfPlanting"
                 />
               </td>
@@ -203,7 +197,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.Originator}
+                  data-initial-value={plant.originator || ''}
+                  value={plant.originator || ''}
                   name="Originator"
                 />
               </td>
@@ -211,7 +206,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.Date}
+                  data-initial-value={plant.date || ''}
+                  value={plant.date || ''}
                   name="Date"
                 />
               </td>
@@ -219,7 +215,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.Country}
+                  data-initial-value={plant.country || ''}
+                  value={plant.country || ''}
                   name="Country"
                 />
               </td>
@@ -227,7 +224,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.ProtectionStatus}
+                  data-initial-value={plant.protectionStatus || ''}
+                  value={plant.protectionStatus || ''}
                   name="ProtectionStatus"
                 />
               </td>
@@ -235,7 +233,8 @@ function PlantsTable() {
                 <input
                   type="checkbox"
                   className="input-field"
-                  checked={plant.HerbariumPresence}
+                  data-initial-value={plant.herbariumPresence}
+                  checked={plant.herbariumPresence || false}
                   name="HerbariumPresence"
                   readOnly
                 />
@@ -244,7 +243,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.FilledOut}
+                  data-initial-value={plant.filledOut || ''}
+                  value={plant.filledOut || ''}
                   name="FilledOut"
                 />
               </td>
@@ -252,7 +252,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.ImagePath}
+                  data-initial-value={plant.imagePath || ''}
+                  value={plant.imagePath || ''}
                   name="ImagePath"
                 />
               </td>
@@ -260,7 +261,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.HerbariumDuplicate}
+                  data-initial-value={plant.herbariumDuplicate || ''}
+                  value={plant.herbariumDuplicate || ''}
                   name="HerbariumDuplicate"
                 />
               </td>
@@ -268,7 +270,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.Note}
+                  data-initial-value={plant.note || ''}
+                  value={plant.note || ''}
                   name="Note"
                 />
               </td>
@@ -276,7 +279,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.Latitude}
+                  data-initial-value={plant.latitude || ''}
+                  value={plant.latitude || ''}
                   name="Latitude"
                 />
               </td>
@@ -284,7 +288,8 @@ function PlantsTable() {
                 <input
                   type="text"
                   className="input-field"
-                  value={plant.Longitude}
+                  data-initial-value={plant.longitude || ''}
+                  value={plant.longitude || ''}
                   name="Longitude"
                 />
               </td>

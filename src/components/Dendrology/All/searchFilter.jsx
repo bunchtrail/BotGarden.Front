@@ -1,20 +1,23 @@
 // components/Dendrology/SearchFilter.jsx
-import React from 'react';
-import ButtonClick from '../../../components/Buttons/Button/ButtonClick';
+import React, { useContext } from 'react';
+import ButtonClick from '../../Buttons/Button/ButtonClick';
+import { PlantsContext } from '../../../assets/js/PlantsContext';
 
 function SearchFilter() {
+  const { saveData } = useContext(PlantsContext);
+
   const handleUpdate = () => {
-    // Обработка обновления данных
     console.log('Update clicked');
+    const formState = {}; // Заполните данными, которые хотите сохранить
+    saveData(formState);
   };
 
   const handleDelete = () => {
-    // Обработка удаления данных
     console.log('Delete clicked');
   };
 
   return (
-    <div className="btn-container">
+    <div className="search-filter-container">
       <select id="searchCategory" className="form-control search-category">
         <option value="PlantId">ID</option>
         <option value="InventorNumber">Инв_номер</option>
@@ -52,12 +55,19 @@ function SearchFilter() {
         placeholder="Поиск..."
         className="form-control search-field"
       />
-      <ButtonClick onClick={handleUpdate} iconClass="fas fa-save" />
-      <ButtonClick
-        onClick={handleDelete}
-        iconClass="fas fa-trash-alt"
-        disabled
-      />
+
+      <div className="button-container">
+        <ButtonClick onClick={handleUpdate} iconClass="fas fa-save">
+          Сохранить
+        </ButtonClick>
+        <ButtonClick
+          onClick={handleDelete}
+          iconClass="fas fa-trash-alt"
+          disabled
+        >
+          Удалить
+        </ButtonClick>
+      </div>
     </div>
   );
 }
