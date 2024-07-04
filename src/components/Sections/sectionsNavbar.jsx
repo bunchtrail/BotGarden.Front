@@ -10,7 +10,7 @@ function SectionNavbar() {
   const { formState } = useContext(FormContext);
 
   return (
-    <div id="navbar" className="rounded-navbar fixed-top">
+    <div id="navbar" className="rounded-navbar fixed-top navsect">
       <Link to="/" className="nav-item">
         <i className="fas fa-home" /> Вернуться на главный экран
       </Link>

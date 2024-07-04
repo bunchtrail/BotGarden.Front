@@ -21,14 +21,14 @@
   margin-right: 15px;
 }
 
-
-
 .nav-item {
   color: white;
   text-decoration: none;
   padding: 10px 20px;
   font-size: 16px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
   border-radius: 20px;
 }
 

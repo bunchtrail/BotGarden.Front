@@ -29,7 +29,7 @@ export default function DendrologyForm() {
   // };
 
   return (
-    <div className="container">
+    <div className="dendrologyContainer">
       <h1 id="departmentName" className="mt-4">
         Выбран отдел: Ботанический сад
       </h1>
