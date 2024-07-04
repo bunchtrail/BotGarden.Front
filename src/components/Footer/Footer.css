@@ -10,11 +10,11 @@
   position: absolute;
 }
 
-.mainFooter a {
+Footer a {
   color: #3cb371;
   text-decoration: none;
 }
 
-.mainFooter a:hover {
+Footer a:hover {
   text-decoration: underline;
 }

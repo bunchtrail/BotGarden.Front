@@ -13,42 +13,6 @@ p {
   color: #343a40;
 }
 
-.btn-group {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.btn {
-  padding: 10px 40px; /* Увеличим внутренние отступы для более круглого вида */
-  border: none;
-  border-radius: 30px; /* Радиус для круглого вида */
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  font-size: 16px;
-  transition:
-    background-color 0.3s ease,
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-.btn-primary {
-  background-color: #3cb371;
-}
-
-.btn-primary:hover {
-  background-color: #2e8b57;
-}
-
 @media (max-width: 768px) {
   .btn-group {
     flex-direction: column;

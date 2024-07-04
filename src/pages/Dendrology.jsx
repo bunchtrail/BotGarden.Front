@@ -8,11 +8,9 @@ import { FormProvider } from '../assets/js/FormContext';
 function Dendrology() {
   return (
     <FormProvider>
-      <div className="content-wrap">
-        <SectionNavbar />
-        <DendrologyForm />
-        <Footer />
-      </div>
+      <SectionNavbar />
+      <DendrologyForm />
+      <Footer />
     </FormProvider>
   );
 }

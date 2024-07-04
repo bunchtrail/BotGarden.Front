@@ -4,7 +4,6 @@ import PlantsAllNavbar from '../components/Navbar/PlantsAllNavbar';
 import { FormProvider } from '../assets/js/FormContext';
 import SearchFilter from '../assets/js/DendrologyAll/searchFilter';
 import PlantsTable from '../components/Dendrology/plantsTable';
-import '../assets/css/dendrologyAll.css';
 
 function DendrologyAll() {
   return (

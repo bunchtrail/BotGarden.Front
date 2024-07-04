@@ -1,6 +1,8 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+// eslint-disable-next-line jsx-a11y/control-has-associated-label
+
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import '../../assets/css/sectionsNavbar.css';
 import saveData from '../../assets/js/saveData'; // Импорт по умолчанию
 import { FormContext } from '../../assets/js/FormContext';
 
@@ -18,7 +20,7 @@ function SectionNavbar() {
         type="button"
         onClick={() => saveData(formState)}
       >
-        <i className="fas fa-save" /> Сохранить
+        <i className="fas fa-save" />
       </button>
     </div>
   );

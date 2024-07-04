@@ -4,7 +4,7 @@ import './sectionsFooter.css';
 
 function sectionsFooter() {
   return (
-    <footer>
+    <footer className="sectionsFooter">
       <p>
         Контакты: <a href="mailto:loleenko@vk.com">loleenko@vk.com</a>
       </p>
