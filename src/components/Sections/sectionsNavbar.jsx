@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import saveData from '../../assets/js/saveData'; // Импорт по умолчанию
 import { FormContext } from '../../assets/js/FormContext';
 
-function SectionNavbar() {
+function SectionNavbar({ sectorId }) {
   const { formState } = useContext(FormContext);
 
   return (
@@ -18,7 +18,7 @@ function SectionNavbar() {
         id="btn-Add"
         className="btn btn-warning"
         type="button"
-        onClick={() => saveData(formState)}
+        onClick={() => saveData(formState, sectorId)}
       >
         <i className="fas fa-save" />
       </button>

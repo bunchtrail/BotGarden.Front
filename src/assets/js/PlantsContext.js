@@ -1,4 +1,3 @@
-// assets/js/PlantsContext.js
 import React, {
   createContext,
   useState,
@@ -47,7 +46,7 @@ export function PlantsProvider({ children, sectorId }) {
         if (result.success) {
           const updatedPlants = plants.map((plant) => {
             const update = plantUpdates.find(
-              (p) => p.PlantId === plant.PlantId
+              (p) => p.plantId === plant.plantId
             );
             return update ? { ...plant, ...update } : plant;
           });

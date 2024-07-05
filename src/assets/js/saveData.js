@@ -1,6 +1,5 @@
-export default async function saveData(formState) {
+export default async function saveData(formState, sectorId) {
   const formData = new FormData();
-
   Object.keys(formState).forEach((key) => {
     let value = formState[key];
     if (value === undefined || value === null) {
@@ -25,7 +24,7 @@ export default async function saveData(formState) {
   formData.set('Longitude', longitude);
 
   // Append additional fields
-  formData.append('SectorId', '1');
+  formData.append('SectorId', sectorId);
   formData.set('HerbariumPresence', formState.HerbariumPresence.toString());
 
   // Output formData to the console for debugging
