@@ -121,12 +121,14 @@ export default function FormFields({
         <div style={{ width: '100%' }}>
           <ToggleMapButton toggleMap={toggleMap} showMap={showMap} />
           <div className={`map-container ${showMap ? 'show' : 'hide'}`}>
-            {/* Перенесем компонент карты сюда */}
             <MapComponent
               latitude={formState.Latitude}
               longitude={formState.Longitude}
               setLatitude={setLatitude}
               setLongitude={setLongitude}
+              allowMarker
+              allowArea={false}
+              mapStyle={{ marginTop: '20px', marginBottom: '20px' }}
             />
           </div>
         </div>

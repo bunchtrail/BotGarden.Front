@@ -9,6 +9,7 @@ import FloraAll from './pages/FloraAll';
 import Floriculture from './pages/Floriculture';
 import FloricultureAll from './pages/FloricultureAll';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import Map from './pages/MapPage';
 import './styles/App.css';
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />;
@@ -26,6 +27,7 @@ function App() {
             <Route path="/dendrology-all" element={<DendrologyAll />} />
             <Route path="/flora-all" element={<FloraAll />} />
             <Route path="/floriculture-all" element={<FloricultureAll />} />
+            <Route path="/map" element={<Map />} />
           </Routes>
         </div>
       </Router>

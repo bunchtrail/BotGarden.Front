@@ -3,7 +3,7 @@ import Button from '../Button/ButtonHref';
 
 function ButtonGroup() {
   return (
-    <div className="btn-group">
+    <div className="btn-group-main">
       <Button href="/dendrology" iconClass="fas fa-tree">
         Дендрология
       </Button>

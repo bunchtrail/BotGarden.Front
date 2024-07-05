@@ -1,22 +1,40 @@
-// ButtonHref.jsx
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Button({ href, iconClass, children }) {
-  return (
-    <a href={href}>
-      <button type="button" className="btn btn-primary">
+function Button({
+  onClick = () => {},
+  iconClass,
+  children,
+  className = 'btn-primary',
+  href,
+}) {
+  if (href) {
+    return (
+      <a href={href} className={`btn ${className}`}>
         <i className={iconClass} /> {children}
-      </button>
-    </a>
+      </a>
+    );
+  }
+
+  return (
+    <button type="button" className={`btn ${className}`} onClick={onClick}>
+      <i className={iconClass} /> {children}
+    </button>
   );
 }
 
 Button.propTypes = {
-  href: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
   iconClass: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  href: PropTypes.string,
+};
+
+Button.defaultProps = {
+  onClick: () => {},
+  className: 'btn-primary',
+  href: '',
 };
 
 export default Button;

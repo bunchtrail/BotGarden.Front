@@ -1,6 +1,6 @@
 // Dendrology.jsx
 import React from 'react';
-import SectionNavbar from '../components/Sections/sectionsNavbar';
+import SectionNavbar from '../components/Navbar/sectionsNavbar';
 import Footer from '../components/Footer/sectionsFooter';
 import AddPlantForm from '../components/AddPlantForm/addPlantForm';
 import { FormProvider } from '../assets/js/FormContext';
