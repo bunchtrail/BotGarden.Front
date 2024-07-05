@@ -19,7 +19,19 @@ export default function AddPlantForm({ sectorId }) {
   return (
     <div className="AddPlantContainer">
       <h1 id="departmentName" className="mt-4">
-        Выбран отдел: Ботанический сад
+        Выбран отдел:{' '}
+        {(() => {
+          switch (sectorId) {
+            case 1:
+              return 'Дендрология';
+            case 2:
+              return 'Флора';
+            case 3:
+              return 'Цветоводство';
+            default:
+              return '';
+          }
+        })()}
       </h1>
       <form id="plantForm">
         <FormFields

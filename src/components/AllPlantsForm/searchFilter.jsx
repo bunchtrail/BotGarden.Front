@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import ButtonClick from '../../Buttons/Button/ButtonClick';
-import { PlantsContext } from '../../../assets/js/PlantsContext';
+import ButtonClick from '../Buttons/Button/ButtonClick';
+import { PlantsContext } from '../../assets/js/PlantsContext';
 
 function SearchFilter() {
   const { updatePlants } = useContext(PlantsContext);

@@ -6,19 +6,19 @@ import SearchFilter from '../components/AllPlantsForm/searchFilter';
 import PlantsTable from '../components/AllPlantsForm/plantsTable';
 import '../assets/css/plantsAllForm.css';
 
-function DendrologyAll() {
+function FloricultureAll() {
   return (
-    <PlantsProvider sectorId={1}>
+    <PlantsProvider sectorId={3}>
       <PlantsAllNavbar />
       <div className="plantsAllContainer">
-        <h1>Список информации о всех растениях - Дендрология</h1>
+        <h1>Список информации о всех растениях - Цветоводство</h1>
         <div className="button-container">
           <SearchFilter />
         </div>
       </div>
-      <PlantsTable sectorId={1} />
+      <PlantsTable sectorId={3} />
     </PlantsProvider>
   );
 }
 
-export default DendrologyAll;
+export default FloricultureAll;

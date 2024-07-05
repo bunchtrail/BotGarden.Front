@@ -4,6 +4,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Dendrology from './pages/Dendrology';
 import DendrologyAll from './pages/DendrologyAll';
+import Flora from './pages/Flora';
+import FloraAll from './pages/FloraAll';
+import Floriculture from './pages/Floriculture';
+import FloricultureAll from './pages/FloricultureAll';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './styles/App.css';
 
@@ -17,9 +21,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/dendrology" element={<Dendrology />} />
+            <Route path="/flora" element={<Flora />} />
+            <Route path="/floriculture" element={<Floriculture />} />
             <Route path="/dendrology-all" element={<DendrologyAll />} />
-
-            {/* Добавьте другие маршруты здесь */}
+            <Route path="/flora-all" element={<FloraAll />} />
+            <Route path="/floriculture-all" element={<FloricultureAll />} />
           </Routes>
         </div>
       </Router>

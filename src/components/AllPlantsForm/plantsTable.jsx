@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { PlantsContext } from '../../../assets/js/PlantsContext';
-import '../../../assets/css/plantsTable.css';
+import { PlantsContext } from '../../assets/js/PlantsContext';
+import '../../assets/css/plantsTable.css';
 import PlantRow from './plantRow';
 import TableHeader from './tableHeader';
 
-function PlantsTable() {
+function PlantsTable({ sectorId }) {
   const { plants } = useContext(PlantsContext);
   const [editedPlants, setEditedPlants] = useState([]);
 
@@ -27,7 +27,9 @@ function PlantsTable() {
     return <div>Данные не найдены</div>;
   }
 
-  const filteredPlants = editedPlants.filter((plant) => plant.sectorId === 1);
+  const filteredPlants = editedPlants.filter(
+    (plant) => plant.sectorId === sectorId
+  );
 
   return (
     <div className="table-responsive">
