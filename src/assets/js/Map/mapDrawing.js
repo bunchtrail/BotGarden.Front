@@ -3,7 +3,6 @@ import 'leaflet-draw';
 
 let drawControl;
 const drawnItems = new L.FeatureGroup();
-
 export function disableOtherModes(map) {
   if (drawControl) {
     console.log('Отключение текущего режима');
@@ -15,6 +14,9 @@ export function disableOtherModes(map) {
 export function enableDrawing(map, mode) {
   console.log('Включение режима рисования', mode);
   disableOtherModes(map);
+  if (!map.hasLayer(drawnItems)) {
+    map.addLayer(drawnItems);
+  }
   drawControl = new L.Control.Draw({
     draw: {
       polygon: mode === 'addArea',
@@ -30,11 +32,18 @@ export function enableDrawing(map, mode) {
     },
   });
   map.addControl(drawControl);
+  map.on(L.Draw.Event.CREATED, (event) => {
+    const { layer } = event;
+    drawnItems.addLayer(layer);
+  });
 }
 
 export function enableEditing(map) {
   console.log('Включение режима редактирования');
   disableOtherModes(map);
+  if (!map.hasLayer(drawnItems)) {
+    map.addLayer(drawnItems);
+  }
   drawControl = new L.Control.Draw({
     draw: {
       polygon: false,
@@ -60,6 +69,9 @@ export function enableEditing(map) {
 export function enableDeleting(map) {
   console.log('Включение режима удаления');
   disableOtherModes(map);
+  if (!map.hasLayer(drawnItems)) {
+    map.addLayer(drawnItems);
+  }
   drawControl = new L.Control.Draw({
     draw: {
       polygon: false,

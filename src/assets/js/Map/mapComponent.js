@@ -41,7 +41,7 @@ function MapComponent({
     allowArea,
     allowEdit,
     allowDelete,
-    mapRef, // Added mapRef to the dependency array
+    mapRef,
   ]);
 
   useEffect(() => {
