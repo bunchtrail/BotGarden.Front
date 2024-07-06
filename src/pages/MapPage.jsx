@@ -1,7 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useRef } from 'react';
-import axios from 'axios'; // Импортируем axios для отправки запросов
-import wellknown from 'wellknown'; // Импортируем библиотеку для преобразования GeoJSON в WKT
 import MapNavbar from '../components/Navbar/MapNavbar';
 import MapComponent from '../assets/js/Map/mapComponent';
 import MapFetching from '../assets/js/Map/mapFetching';
@@ -10,7 +8,6 @@ import {
   enableEditing,
   enableDeleting,
   disableOtherModes,
-  drawnItems,
 } from '../assets/js/Map/mapDrawing';
 
 function MapPage() {
@@ -24,31 +21,6 @@ function MapPage() {
     width: '89%',
     margin: '0 auto',
     marginTop: '120px',
-  };
-
-  const sendAreaToServer = async () => {
-    if (drawnItems.getLayers().length > 0) {
-      const layer = drawnItems.getLayers()[0];
-      const geoJson = layer.toGeoJSON();
-      const wkt = wellknown.stringify(geoJson.geometry); // Преобразование GeoJSON в WKT
-
-      try {
-        const response = await axios.post('/api/AddArea', {
-          LocationPath: 'some_path', // Укажите путь для локации
-          Geometry: wkt,
-        });
-
-        if (response.status === 200) {
-          alert('Область успешно добавлена!');
-        } else {
-          alert('Ошибка при добавлении области.');
-        }
-      } catch (error) {
-        alert(`Ошибка при добавлении области: ${error.message}`);
-      }
-    } else {
-      alert('Не выделено ни одной области.');
-    }
   };
 
   const setMode = (mode) => {
@@ -73,7 +45,7 @@ function MapPage() {
 
   return (
     <>
-      <MapNavbar setMapMode={setMode} sendAreaToServer={sendAreaToServer} />
+      <MapNavbar setMapMode={setMode} />
       <MapComponent
         latitude={latitude}
         longitude={longitude}
