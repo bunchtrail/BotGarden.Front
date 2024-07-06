@@ -5,6 +5,7 @@ import MapComponent from '../assets/js/Map/mapComponent';
 function MapPage() {
   const [latitude, setLatitude] = useState(51.505);
   const [longitude, setLongitude] = useState(-0.09);
+  const [mapMode, setMapMode] = useState('view'); // Добавляем состояние для режима карты
 
   const customMapStyle = {
     height: '650px', // Увеличение высоты карты
@@ -15,17 +16,17 @@ function MapPage() {
 
   return (
     <>
-      <MapNavbar />
+      <MapNavbar setMapMode={setMapMode} />
       <MapComponent
         latitude={latitude}
         longitude={longitude}
         setLatitude={setLatitude}
         setLongitude={setLongitude}
-        allowMarker
-        allowArea
-        allowEdit
-        allowDelete
-        mapStyle={customMapStyle} // Передача кастомных стилей
+        allowMarker={mapMode === 'marker'}
+        allowArea={mapMode === 'addArea'}
+        allowEdit={mapMode === 'editArea'}
+        allowDelete={mapMode === 'deleteArea' || mapMode === 'deletePlants'}
+        mapStyle={customMapStyle}
       />
     </>
   );
