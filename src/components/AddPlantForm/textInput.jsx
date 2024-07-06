@@ -1,9 +1,11 @@
 import React from 'react';
 
-function TextInput({ id, name, value, onChange }) {
+function TextInput({ id, name, value, onChange, hidden }) {
+  const inputType = hidden ? 'hidden' : 'text';
+
   return (
     <input
-      type="text"
+      type={inputType}
       className="form-control"
       id={id}
       name={name}

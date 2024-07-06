@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MapNavbar from '../components/Navbar/MapNavbar';
-import MapComponent from '../assets/js/mapComponent';
+import MapComponent from '../assets/js/Map/mapComponent';
 
 function MapPage() {
   const [latitude, setLatitude] = useState(51.505);

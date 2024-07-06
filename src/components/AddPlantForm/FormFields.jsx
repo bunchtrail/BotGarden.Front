@@ -4,7 +4,7 @@ import FormGroup from './formGroup';
 import TextInput from './textInput';
 import SelectInput from './selectInput';
 import ToggleMapButton from './toggleMapButton';
-import MapComponent from '../../assets/js/mapComponent';
+import MapComponent from '../../assets/js/Map/mapComponent';
 
 export default function FormFields({
   formState,
@@ -100,20 +100,22 @@ export default function FormFields({
         </FormGroup>
       </FormRow>
       <FormRow>
-        <FormGroup colSize={6} label="Широта" htmlFor="Latitude">
+        <FormGroup colSize={6} label="" htmlFor="Latitude">
           <TextInput
             id="Latitude"
             name="Latitude"
             value={formState.Latitude}
             onChange={(e) => setLatitude(parseFloat(e.target.value))}
+            hidden
           />
         </FormGroup>
-        <FormGroup colSize={6} label="Долгота" htmlFor="Longitude">
+        <FormGroup colSize={6} label="" htmlFor="Longitude">
           <TextInput
             id="Longitude"
             name="Longitude"
             value={formState.Longitude}
             onChange={(e) => setLongitude(parseFloat(e.target.value))}
+            hidden
           />
         </FormGroup>
       </FormRow>
