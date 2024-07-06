@@ -2,7 +2,7 @@ import L from 'leaflet';
 import 'leaflet-draw';
 
 let drawControl;
-const drawnItems = new L.FeatureGroup();
+export const drawnItems = new L.FeatureGroup();
 export function disableOtherModes(map) {
   if (drawControl) {
     console.log('Отключение текущего режима');

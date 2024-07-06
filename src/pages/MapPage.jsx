@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import MapNavbar from '../components/Navbar/MapNavbar';
 import MapComponent from '../assets/js/Map/mapComponent';
+import MapFetching from '../assets/js/Map/mapFetching';
 import {
   enableDrawing,
   enableEditing,
@@ -56,6 +57,7 @@ function MapPage() {
         mapStyle={customMapStyle}
         mapRef={mapRef}
       />
+      <MapFetching mapRef={mapRef} />
     </>
   );
 }
