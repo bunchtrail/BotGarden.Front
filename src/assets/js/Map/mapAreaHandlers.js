@@ -3,7 +3,17 @@
 import L from 'leaflet';
 import { drawnItems } from './mapDrawing';
 
-export default function handleAddArea(layer) {
+function removeLayerAndUpdateMap(layer, map) {
+  if (!map) {
+    console.error('Map object is undefined');
+    return;
+  }
+  drawnItems.removeLayer(layer);
+  layer.removeFrom(map);
+  map.invalidateSize();
+}
+
+export default function handleAddArea(layer, map) {
   const coordinates = layer.getLatLngs()[0];
 
   if (coordinates.length < 3) {
@@ -24,13 +34,13 @@ export default function handleAddArea(layer) {
 
   span.onclick = function () {
     modal.style.display = 'none';
-    drawnItems.removeLayer(layer);
+    removeLayerAndUpdateMap(layer, map);
   };
 
   window.onclick = function (event) {
     if (event.target === modal) {
       modal.style.display = 'none';
-      drawnItems.removeLayer(layer);
+      removeLayerAndUpdateMap(layer, map);
     }
   };
 
@@ -62,15 +72,15 @@ export default function handleAddArea(layer) {
       .then((data) => {
         console.log('Область сохранена', data);
         layer.bindPopup(areaName).openPopup();
-        layer.options.areaId = data.locationId; // Устанавливаем areaId в options
-        drawnItems.addLayer(layer); // Добавляем слой в drawnItems после успешного сохранения
+        layer.options.areaId = data.locationId;
+        drawnItems.addLayer(layer);
         modal.style.display = 'none';
       })
       .catch((error) => console.error('Ошибка при сохранении области:', error));
   };
 }
 
-export function handleEditArea(event) {
+export function handleEditArea(event, map) {
   event.layers.eachLayer(function (layer) {
     const coordinates = layer.getLatLngs()[0];
     console.log('Редактирование области:', layer.options.areaId, coordinates);
@@ -83,7 +93,7 @@ export function handleEditArea(event) {
 
     const wkt = `POLYGON((${coordinates.map((coord) => `${coord.lng} ${coord.lat}`).join(',')},${coordinates[0].lng} ${coordinates[0].lat}))`;
     const updatedArea = {
-      LocationId: layer.options.areaId, // Используем options для доступа к areaId
+      LocationId: layer.options.areaId,
       Geometry: wkt,
     };
 
@@ -107,14 +117,12 @@ export function handleEditArea(event) {
       .then((data) => {
         console.log('Область обновлена', data);
 
-        // Удаляем старый слой из drawnItems
-        drawnItems.removeLayer(layer);
+        removeLayerAndUpdateMap(layer, map);
 
-        // Создаем новый слой с обновленными координатами
         const latlngs = coordinates.map((coord) => [coord.lat, coord.lng]);
 
         const polygon = L.polygon(latlngs, {
-          areaId: data.locationId, // Устанавливаем areaId для нового слоя
+          areaId: data.locationId,
         }).addTo(drawnItems);
         polygon.bindPopup(data.locationPath).openPopup();
 

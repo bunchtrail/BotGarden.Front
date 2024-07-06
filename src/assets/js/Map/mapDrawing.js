@@ -67,7 +67,7 @@ export function enableEditing(map) {
     },
   });
   map.addControl(drawControl);
-  map.on('draw:edited', handleEditArea); // Добавляем обработчик для редактирования областей
+  map.on('draw:edited', (event) => handleEditArea(event, map)); // Добавляем обработчик для редактирования областей
 }
 
 export function enableDeleting(map) {
