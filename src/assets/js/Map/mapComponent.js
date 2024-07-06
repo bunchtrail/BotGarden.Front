@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
+
 import { initializeMap } from './mapInitialization';
 import { addMapHandlers } from './mapHandlers';
 

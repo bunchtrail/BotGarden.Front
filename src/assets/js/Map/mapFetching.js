@@ -2,7 +2,20 @@ import { useEffect } from 'react';
 import L from 'leaflet';
 import 'leaflet-draw';
 import WKT from 'terraformer-wkt-parser';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import { drawnItems } from './mapDrawing';
+
+const customIcon = L.icon({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
 
 const fetchPlants = (map) => {
   fetch('https://localhost:7076/api/Map/GetAll')
@@ -15,7 +28,9 @@ const fetchPlants = (map) => {
     .then((data) => {
       data.forEach((plant) => {
         if (plant.latitude && plant.longitude) {
-          const marker = L.marker([plant.latitude, plant.longitude]).addTo(map);
+          const marker = L.marker([plant.latitude, plant.longitude], {
+            icon: customIcon,
+          }).addTo(map);
           const popupContent = `<div>
             <h4>${plant.species || 'Нет данных'}</h4>
             <p>Сорт: ${plant.variety || 'Нет данных'}</p>
@@ -24,7 +39,7 @@ const fetchPlants = (map) => {
           </div>`;
           console.log(data);
           marker.bindPopup(popupContent);
-          marker.plantId = plant.plantId; // Устанавливаем plantId на маркер
+          marker.plantId = plant.plantId;
           marker.species = plant.species;
           marker.variety = plant.variety;
           marker.note = plant.note;
