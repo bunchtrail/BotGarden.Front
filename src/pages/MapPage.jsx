@@ -5,13 +5,13 @@ import MapComponent from '../assets/js/Map/mapComponent';
 function MapPage() {
   const [latitude, setLatitude] = useState(51.505);
   const [longitude, setLongitude] = useState(-0.09);
-  const [mapMode, setMapMode] = useState('view'); // Добавляем состояние для режима карты
+  const [mapMode, setMapMode] = useState('view');
 
   const customMapStyle = {
-    height: '650px', // Увеличение высоты карты
-    width: '89%', // Уменьшение ширины карты
-    margin: '0 auto', // Центрирование карты
-    marginTop: '120px', // Отступ от навбара
+    height: '650px',
+    width: '89%',
+    margin: '0 auto',
+    marginTop: '120px',
   };
 
   return (
