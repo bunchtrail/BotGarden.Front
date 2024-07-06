@@ -64,6 +64,7 @@ function MapPage() {
         allowEdit={mapMode === 'editArea'}
         allowDelete={mapMode === 'deleteArea' || mapMode === 'deletePlants'}
         mapStyle={customMapStyle}
+        mapRef={mapRef}
       />
       <MapFetching mapRef={mapRef} />
       <AreaModal />
