@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import FormRow from './formRow';
 import FormGroup from './formGroup';
 import TextInput from './textInput';
@@ -18,6 +18,7 @@ export default function FormFields({
   showMap, // получение состояния showMap
   sectorId,
 }) {
+  const mapRef = useRef(null);
   return (
     <>
       <FormRow>
@@ -131,6 +132,7 @@ export default function FormFields({
               allowMarker
               allowArea={false}
               mapStyle={{ marginTop: '20px', marginBottom: '20px' }}
+              mapRef={mapRef}
             />
           </div>
         </div>
