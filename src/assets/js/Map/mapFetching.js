@@ -81,7 +81,8 @@ const fetchAreas = (map) => {
             ]);
             const layer = L.polygon(latlngs).addTo(map);
             layer.bindPopup(area.locationPath); // Используем LocationPath как имя
-            layer.areaId = area.locationId;
+            layer.options.areaId = area.locationId; // Устанавливаем areaId в options
+            console.log('Загружен areaId:', layer.options.areaId);
             layer.locationPath = area.locationPath;
             drawnItems.addLayer(layer);
           } else {

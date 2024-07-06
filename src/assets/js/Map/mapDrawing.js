@@ -1,8 +1,11 @@
+/* eslint-disable import/no-cycle */
 import L from 'leaflet';
 import 'leaflet-draw';
+import handleAddArea, { handleEditArea } from './mapAreaHandlers';
 
 let drawControl;
 export const drawnItems = new L.FeatureGroup();
+
 export function disableOtherModes(map) {
   if (drawControl) {
     console.log('Отключение текущего режима');
@@ -34,7 +37,7 @@ export function enableDrawing(map, mode) {
   map.addControl(drawControl);
   map.on(L.Draw.Event.CREATED, (event) => {
     const { layer } = event;
-    drawnItems.addLayer(layer);
+    handleAddArea(layer, map); // Добавляем обработчик для новой области
   });
 }
 
@@ -64,6 +67,7 @@ export function enableEditing(map) {
     },
   });
   map.addControl(drawControl);
+  map.on('draw:edited', handleEditArea); // Добавляем обработчик для редактирования областей
 }
 
 export function enableDeleting(map) {
