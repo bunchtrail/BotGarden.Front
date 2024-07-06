@@ -1,35 +1,78 @@
 import L from 'leaflet';
 import 'leaflet-draw';
 
-export function enableDrawing(mapRef, allowArea, allowDelete, allowEdit) {
-  const map = mapRef.current;
+let drawControl;
+const drawnItems = new L.FeatureGroup();
 
-  if (map && allowArea) {
-    const drawnItems = new L.FeatureGroup();
-    map.addLayer(drawnItems);
-
-    const drawControl = new L.Control.Draw({
-      edit: {
-        featureGroup: drawnItems,
-        remove: allowDelete,
-        edit: allowEdit,
-      },
-      draw: {
-        polygon: true,
-        polyline: true,
-        rectangle: true,
-        circle: false,
-        marker: false,
-      },
-    });
-
-    map.addControl(drawControl);
-
-    map.on(L.Draw.Event.CREATED, (event) => {
-      const { layer } = event;
-      drawnItems.addLayer(layer);
-    });
+export function disableOtherModes(map) {
+  if (drawControl) {
+    console.log('Отключение текущего режима');
+    map.removeControl(drawControl);
+    drawControl = null;
   }
 }
 
-export default enableDrawing;
+export function enableDrawing(map, mode) {
+  console.log('Включение режима рисования', mode);
+  disableOtherModes(map);
+  drawControl = new L.Control.Draw({
+    draw: {
+      polygon: mode === 'addArea',
+      rectangle: mode === 'addArea' || mode === 'deletePlants',
+      circle: false,
+      marker: false,
+      polyline: false,
+    },
+    edit: {
+      featureGroup: drawnItems,
+      edit: false,
+      remove: false,
+    },
+  });
+  map.addControl(drawControl);
+}
+
+export function enableEditing(map) {
+  console.log('Включение режима редактирования');
+  disableOtherModes(map);
+  drawControl = new L.Control.Draw({
+    draw: {
+      polygon: false,
+      rectangle: false,
+      circle: false,
+      marker: false,
+      polyline: false,
+    },
+    edit: {
+      featureGroup: drawnItems,
+      edit: {
+        selectedPathOptions: {
+          maintainColor: false,
+          opacity: 0.3,
+        },
+      },
+      remove: false,
+    },
+  });
+  map.addControl(drawControl);
+}
+
+export function enableDeleting(map) {
+  console.log('Включение режима удаления');
+  disableOtherModes(map);
+  drawControl = new L.Control.Draw({
+    draw: {
+      polygon: false,
+      rectangle: false,
+      circle: false,
+      marker: false,
+      polyline: false,
+    },
+    edit: {
+      featureGroup: drawnItems,
+      edit: false,
+      remove: true,
+    },
+  });
+  map.addControl(drawControl);
+}

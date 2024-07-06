@@ -3,7 +3,6 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import { initializeMap } from './mapInitialization';
 import { addMapHandlers } from './mapHandlers';
-import { enableDrawing } from './mapDrawing';
 
 function MapComponent({
   latitude,
@@ -15,8 +14,8 @@ function MapComponent({
   allowEdit = false,
   allowDelete = false,
   mapStyle,
+  mapRef,
 }) {
-  const mapRef = useRef(null);
   const markerRef = useRef(null);
 
   useEffect(() => {
@@ -33,7 +32,6 @@ function MapComponent({
       markerRef
     );
     addMapHandlers(mapRef, setLatitude, setLongitude, markerRef);
-    enableDrawing(mapRef, allowArea, allowDelete, allowEdit);
   }, [
     latitude,
     longitude,
@@ -43,6 +41,7 @@ function MapComponent({
     allowArea,
     allowEdit,
     allowDelete,
+    mapRef, // Added mapRef to the dependency array
   ]);
 
   useEffect(() => {
