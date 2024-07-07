@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/no-cycle */
 import L from 'leaflet';
@@ -143,4 +145,74 @@ export function handleEditArea(event, map) {
       })
       .catch((error) => console.error('Ошибка при обновлении области:', error));
   });
+}
+
+export function handleDeleteArea(event, map) {
+  event.layers.eachLayer(function (layer) {
+    const { areaId } = layer.options;
+    console.log('Удаление области с ID:', areaId);
+
+    fetch(`https://localhost:7076/api/Map/DeleteArea/${areaId}`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((text) => {
+            throw new Error(text);
+          });
+        }
+        console.log('Область удалена');
+        removeLayerAndUpdateMap(layer, map); // Удаляем слой после успешного запроса
+      })
+      .catch((error) => console.error('Ошибка при удалении области:', error));
+  });
+}
+
+export function handleDeletePlantsInArea(layer, map) {
+  const bounds = layer.getBounds();
+  const markersToRemove = [];
+
+  drawnItems.eachLayer(function (marker) {
+    if (marker instanceof L.Marker && bounds.contains(marker.getLatLng())) {
+      console.log(
+        'Plant ID:',
+        marker._plantId,
+        'Type:',
+        typeof marker._plantId
+      );
+      markersToRemove.push(marker._plantId);
+    }
+  });
+
+  console.log('Markers to remove:', markersToRemove);
+
+  if (markersToRemove.length > 0) {
+    fetch('https://localhost:7076/api/Map/DeletePlantsInArea', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ plantIds: markersToRemove }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((text) => {
+            throw new Error(text);
+          });
+        }
+        console.log('Растения удалены');
+        markersToRemove.forEach((id) => {
+          drawnItems.eachLayer(function (marker) {
+            if (marker instanceof L.Marker && marker._plantId === id) {
+              map.removeLayer(marker);
+            }
+          });
+        });
+      })
+      .catch((error) => console.error('Ошибка при удалении растений:', error));
+  }
+
+  map.removeLayer(layer);
+  // Сбрасываем режим после завершения операции
+  // currentMode = null;
 }

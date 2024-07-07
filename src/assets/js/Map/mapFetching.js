@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 import { useEffect } from 'react';
 import L from 'leaflet';
@@ -20,7 +21,7 @@ const customIcon = L.icon({
 
 const fetchPlants = (map) => {
   console.log('Fetching plants');
-  fetch('https://localhost:7076/api/Map/GetAll')
+  fetch('https://localhost:7076/api/Map/GetAll') // измените URL для использования прокси
     .then((response) => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -41,7 +42,7 @@ const fetchPlants = (map) => {
           </div>`;
           console.log('Plant data:', plant);
           marker.bindPopup(popupContent);
-          marker.plantId = plant.plantId;
+          marker._plantId = plant.plantId; // изменено с marker.plantId
           marker.species = plant.species;
           marker.variety = plant.variety;
           marker.note = plant.note;

@@ -1,7 +1,11 @@
 /* eslint-disable import/no-cycle */
 import L from 'leaflet';
 import 'leaflet-draw';
-import handleAddArea, { handleEditArea } from './mapAreaHandlers';
+import handleAddArea, {
+  handleEditArea,
+  handleDeleteArea,
+  handleDeletePlantsInArea,
+} from './mapAreaHandlers';
 
 let drawControl;
 export const drawnItems = new L.FeatureGroup();
@@ -37,8 +41,11 @@ export function enableDrawing(map, mode) {
   map.addControl(drawControl);
   map.on(L.Draw.Event.CREATED, (event) => {
     const { layer } = event;
-    console.log('Создание новой области:', layer);
-    handleAddArea(layer, map); // Добавляем обработчик для новой области
+    if (mode === 'deletePlants') {
+      handleDeletePlantsInArea(layer, map);
+    } else {
+      handleAddArea(layer, map); // Добавляем обработчик для новой области
+    }
   });
 }
 
@@ -95,4 +102,8 @@ export function enableDeleting(map) {
     },
   });
   map.addControl(drawControl);
+  map.on('draw:deleted', (event) => {
+    console.log('Удаление области:', event);
+    handleDeleteArea(event, map); // Добавляем обработчик для удаления областей
+  });
 }
