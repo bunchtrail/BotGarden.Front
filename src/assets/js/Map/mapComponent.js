@@ -19,36 +19,48 @@ function MapComponent({
 }) {
   const mapContainerRef = useRef(null);
 
-  useEffect(() => {
-    if (!mapContainerRef.current) {
-      console.log('mapContainerRef.current is null');
-      return;
-    }
+  console.log('MapComponent props:', {
+    latitude,
+    longitude,
+    setLatitude,
+    setLongitude,
+    allowMarker,
+    allowArea,
+    allowEdit,
+    allowDelete,
+    mapRef,
+  });
 
-    if (!mapRef.current) {
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+
+    const mapExists =
+      mapRef.current && mapRef.current.leaflet_map instanceof L.Map;
+    if (!mapExists) {
       console.log('Initializing map...');
-      const initializedMap = initializeMap(
-        latitude,
-        longitude,
-        setLatitude,
-        setLongitude,
-        allowMarker,
-        allowArea,
-        allowEdit,
-        allowDelete,
-        mapContainerRef
-      );
-      if (initializedMap) {
-        mapRef.current = { leaflet_map: initializedMap };
-        console.log('Map initialized:', initializedMap);
-      }
+      mapRef.current = {
+        leaflet_map: initializeMap(
+          latitude,
+          longitude,
+          setLatitude,
+          setLongitude,
+          allowMarker,
+          allowArea,
+          allowEdit,
+          allowDelete,
+          mapContainerRef
+        ),
+      };
     } else {
       console.log('Using existing map instance');
-      if (mapRef.current.leaflet_map instanceof L.Map) {
-        console.log('MapRef is a valid L.Map instance');
-      } else {
-        console.error('Existing map instance is not a valid L.Map');
-      }
+      const map = mapRef.current.leaflet_map;
+
+      map.off('click').on('click', function (e) {
+        const { lat, lng } = e.latlng;
+        setLatitude(lat);
+        setLongitude(lng);
+        console.log('Map clicked at:', lat, lng);
+      });
     }
   }, [
     latitude,

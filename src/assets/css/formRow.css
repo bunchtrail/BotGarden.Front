@@ -1,0 +1,7 @@
+.form-row.hide {
+  display: none;
+}
+
+.form-row.show {
+  display: flex; /* or whatever display style you need */
+}

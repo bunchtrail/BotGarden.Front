@@ -5,7 +5,7 @@ import './Footer.css';
 function Footer() {
   return (
     <footer className="mainFooter">
-      <p>
+      <p style={{ color: '#ffffff' }}>
         Контакты: <a href="mailto:loleenko@vk.com">loleenko@vk.com</a>
       </p>
     </footer>

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import '../../assets/css/formRow.css'; // Ensure you have the appropriate CSS file
 
 function FormRow({ children, hidden }) {
   const rowClass = hidden ? 'form-row hide' : 'form-row show';

@@ -9,9 +9,7 @@ h1 {
   margin-top: 20px;
 }
 
-p {
-  color: #ffffff;
-}
+
 
 @media (max-width: 768px) {
   .btn-group {

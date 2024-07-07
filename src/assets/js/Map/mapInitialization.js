@@ -70,6 +70,8 @@ export function initializeMap(
     marker.on('dragend', function (event) {
       const position = event.target.getLatLng();
       console.log('Marker dragged to:', position);
+      console.log('Calling setLatitude with:', position.lat);
+      console.log('Calling setLongitude with:', position.lng);
       setLatitude(position.lat);
       setLongitude(position.lng);
     });
@@ -91,9 +93,17 @@ export function initializeMap(
         icon: defaultIcon,
       }).addTo(map);
 
+      console.log('Click marker added to map:', clickMarker);
+
+      clickMarker.on('add', function () {
+        console.log('Click marker added to map');
+      });
+
       clickMarker.on('dragend', function (event) {
         const position = event.target.getLatLng();
-        console.log('Marker dragged to:', position);
+        console.log('Click marker dragged to:', position);
+        console.log('Calling setLatitude with:', position.lat);
+        console.log('Calling setLongitude with:', position.lng);
         setLatitude(position.lat);
         setLongitude(position.lng);
       });
