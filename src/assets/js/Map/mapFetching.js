@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { useEffect } from 'react';
 import L from 'leaflet';
 import 'leaflet-draw';
@@ -18,6 +19,7 @@ const customIcon = L.icon({
 });
 
 const fetchPlants = (map) => {
+  console.log('Fetching plants');
   fetch('https://localhost:7076/api/Map/GetAll')
     .then((response) => {
       if (!response.ok) {
@@ -37,7 +39,7 @@ const fetchPlants = (map) => {
             <p>Описание: ${plant.note || 'Нет данных'}</p>
             <button id="delete">Удалить</button>
           </div>`;
-          console.log(data);
+          console.log('Plant data:', plant);
           marker.bindPopup(popupContent);
           marker.plantId = plant.plantId;
           marker.species = plant.species;
@@ -55,6 +57,7 @@ const fetchPlants = (map) => {
 };
 
 const fetchAreas = (map) => {
+  console.log('Fetching areas');
   fetch('https://localhost:7076/api/Map/GetAllAreas')
     .then((response) => {
       if (!response.ok) {
@@ -103,9 +106,15 @@ const fetchAreas = (map) => {
 
 function MapFetching({ mapRef }) {
   useEffect(() => {
-    if (mapRef.current) {
-      fetchPlants(mapRef.current);
-      fetchAreas(mapRef.current);
+    if (
+      mapRef.current &&
+      mapRef.current.leaflet_map &&
+      !mapRef.current.loaded
+    ) {
+      console.log('MapFetching useEffect triggered');
+      fetchPlants(mapRef.current.leaflet_map);
+      fetchAreas(mapRef.current.leaflet_map);
+      mapRef.current.loaded = true; // Флаг для предотвращения повторной загрузки
     }
   }, [mapRef]);
 

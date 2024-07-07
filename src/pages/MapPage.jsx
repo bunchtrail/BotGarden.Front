@@ -42,7 +42,7 @@ function MapPage() {
         console.error('MapRef is not an instance of L.Map');
       }
     }
-  }, [mapMode]);
+  }, [mapMode, mapRef]);
 
   const customMapStyle = {
     height: '650px',

@@ -37,6 +37,7 @@ export function enableDrawing(map, mode) {
   map.addControl(drawControl);
   map.on(L.Draw.Event.CREATED, (event) => {
     const { layer } = event;
+    console.log('Создание новой области:', layer);
     handleAddArea(layer, map); // Добавляем обработчик для новой области
   });
 }
@@ -67,7 +68,10 @@ export function enableEditing(map) {
     },
   });
   map.addControl(drawControl);
-  map.on('draw:edited', (event) => handleEditArea(event, map)); // Добавляем обработчик для редактирования областей
+  map.on('draw:edited', (event) => {
+    console.log('Редактирование области:', event);
+    handleEditArea(event, map); // Добавляем обработчик для редактирования областей
+  });
 }
 
 export function enableDeleting(map) {

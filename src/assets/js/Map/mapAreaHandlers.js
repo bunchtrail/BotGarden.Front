@@ -8,9 +8,21 @@ function removeLayerAndUpdateMap(layer, map) {
     console.error('Map object is undefined');
     return;
   }
-  drawnItems.removeLayer(layer);
-  layer.removeFrom(map);
+  console.log('Removing layer from drawnItems and map:', layer);
+  if (drawnItems.hasLayer(layer)) {
+    drawnItems.removeLayer(layer);
+    console.log('Layer removed from drawnItems');
+  } else {
+    console.warn('Layer not found in drawnItems');
+  }
+  if (map.hasLayer(layer)) {
+    map.removeLayer(layer);
+    console.log('Layer removed from map');
+  } else {
+    console.warn('Layer not found on map');
+  }
   map.invalidateSize();
+  console.log('Layer removed and map updated');
 }
 
 export default function handleAddArea(layer, map) {
@@ -97,6 +109,9 @@ export function handleEditArea(event, map) {
       Geometry: wkt,
     };
 
+    console.log('Удаление старого слоя:', layer.options.areaId);
+    removeLayerAndUpdateMap(layer, map);
+
     console.log('Обновление данных на сервере:', JSON.stringify(updatedArea));
 
     fetch('https://localhost:7076/api/Map/UpdateArea', {
@@ -116,8 +131,6 @@ export function handleEditArea(event, map) {
       })
       .then((data) => {
         console.log('Область обновлена', data);
-
-        removeLayerAndUpdateMap(layer, map);
 
         const latlngs = coordinates.map((coord) => [coord.lat, coord.lng]);
 

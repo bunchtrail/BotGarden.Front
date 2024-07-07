@@ -1,25 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
+/* eslint-disable no-param-reassign */
+import React, { useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
-
 import L from 'leaflet';
 import { initializeMap } from './mapInitialization';
-import { addMapHandlers } from './mapHandlers';
 
 function MapComponent({
   latitude,
   longitude,
   setLatitude,
   setLongitude,
-  allowMarker = true,
-  allowArea = false,
-  allowEdit = false,
-  allowDelete = false,
+  allowMarker,
+  allowArea,
+  allowEdit,
+  allowDelete,
   mapStyle,
+  mapRef,
 }) {
   const mapContainerRef = useRef(null);
-  const markerRef = useRef(null);
-  const [map, setMap] = useState(null);
 
   useEffect(() => {
     if (!mapContainerRef.current) {
@@ -27,7 +25,7 @@ function MapComponent({
       return;
     }
 
-    if (!mapContainerRef.current.leaflet_map) {
+    if (!mapRef.current) {
       console.log('Initializing map...');
       const initializedMap = initializeMap(
         latitude,
@@ -38,17 +36,16 @@ function MapComponent({
         allowArea,
         allowEdit,
         allowDelete,
-        mapContainerRef,
-        markerRef
+        mapContainerRef
       );
       if (initializedMap) {
-        setMap(initializedMap);
+        mapRef.current = { leaflet_map: initializedMap };
         console.log('Map initialized:', initializedMap);
       }
     } else {
       console.log('Using existing map instance');
-      if (mapContainerRef.current.leaflet_map instanceof L.Map) {
-        setMap(mapContainerRef.current.leaflet_map);
+      if (mapRef.current.leaflet_map instanceof L.Map) {
+        console.log('MapRef is a valid L.Map instance');
       } else {
         console.error('Existing map instance is not a valid L.Map');
       }
@@ -62,27 +59,8 @@ function MapComponent({
     allowArea,
     allowEdit,
     allowDelete,
+    mapRef,
   ]);
-
-  useEffect(() => {
-    if (map) {
-      if (map instanceof L.Map) {
-        console.log('Adding map handlers...');
-        addMapHandlers({ current: map }, setLatitude, setLongitude, markerRef);
-        console.log('Map handlers added.');
-      } else {
-        console.error('Map object is not an instance of L.Map');
-      }
-    }
-  }, [map, setLatitude, setLongitude]);
-
-  useEffect(() => {
-    if (map && markerRef.current) {
-      console.log('Updating marker position...');
-      markerRef.current.setLatLng([latitude, longitude]);
-      console.log('Marker position updated:', [latitude, longitude]);
-    }
-  }, [latitude, longitude, map]);
 
   return <div id="map" style={mapStyle} ref={mapContainerRef} />;
 }
