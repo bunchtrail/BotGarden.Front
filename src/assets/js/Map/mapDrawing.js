@@ -43,7 +43,7 @@ export function enableDrawing(map, mode) {
     const { layer } = event;
     if (mode === 'deletePlants') {
       handleDeletePlantsInArea(layer, map);
-    } else {
+    } else if (mode === 'addArea') {
       handleAddArea(layer, map); // Добавляем обработчик для новой области
     }
   });

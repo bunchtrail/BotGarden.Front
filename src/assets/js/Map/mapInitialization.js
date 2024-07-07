@@ -50,76 +50,17 @@ export function initializeMap(
 
   console.log('Map created:', map);
 
-  if (allowMarker) {
-    console.log('Creating initial marker');
-    const defaultIcon = L.icon({
-      iconRetinaUrl: markerIcon2x,
-      iconUrl: markerIcon,
-      shadowUrl: markerShadow,
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41],
-    });
+  const defaultIcon = L.icon({
+    iconRetinaUrl: markerIcon2x,
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  });
 
-    const marker = L.marker([latitude, longitude], {
-      draggable: true,
-      icon: defaultIcon,
-    }).addTo(map);
-
-    marker.on('dragend', function (event) {
-      const position = event.target.getLatLng();
-      console.log('Marker dragged to:', position);
-      console.log('Calling setLatitude with:', position.lat);
-      console.log('Calling setLongitude with:', position.lng);
-      setLatitude(position.lat);
-      setLongitude(position.lng);
-    });
-
-    mapContainerRef.current.marker = marker;
-
-    console.log('Initial marker created:', marker);
-
-    map.on('click', function (e) {
-      const { lat, lng } = e.latlng;
-      console.log('Map clicked at:', lat, lng);
-
-      if (mapContainerRef.current.marker) {
-        map.removeLayer(mapContainerRef.current.marker);
-      }
-
-      const clickMarker = L.marker([lat, lng], {
-        draggable: true,
-        icon: defaultIcon,
-      }).addTo(map);
-
-      console.log('Click marker added to map:', clickMarker);
-
-      clickMarker.on('add', function () {
-        console.log('Click marker added to map');
-      });
-
-      clickMarker.on('dragend', function (event) {
-        const position = event.target.getLatLng();
-        console.log('Click marker dragged to:', position);
-        console.log('Calling setLatitude with:', position.lat);
-        console.log('Calling setLongitude with:', position.lng);
-        setLatitude(position.lat);
-        setLongitude(position.lng);
-      });
-
-      clickMarker.on('dblclick', function () {
-        map.removeLayer(clickMarker);
-        mapContainerRef.current.marker = null;
-        console.log('Marker removed on double-click');
-      });
-
-      mapContainerRef.current.marker = clickMarker;
-
-      console.log('Marker created on click:', clickMarker);
-    });
-  }
-
+  mapContainerRef.current.defaultIcon = defaultIcon;
   mapContainerRef.current.leaflet_map = map;
 
   console.log('Returning newly created map instance:', map);
