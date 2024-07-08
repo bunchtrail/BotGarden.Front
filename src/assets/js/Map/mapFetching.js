@@ -113,6 +113,36 @@ const fetchAreas = (map, mod, setPath) => {
           }
         }
       });
+
+      // Add click event to the map itself
+      if (mod === 'marker') {
+        map.on('click', (e) => {
+          if (currentMarker) {
+            map.removeLayer(currentMarker);
+          }
+          currentMarker = L.marker(e.latlng, {
+            draggable: true,
+            icon: customIcon,
+          }).addTo(map);
+
+          let locationFound = false;
+
+          map.eachLayer((mapLayer) => {
+            if (
+              mapLayer instanceof L.Polygon &&
+              mapLayer.getBounds().contains(e.latlng)
+            ) {
+              console.log('clicked at ', mapLayer.locationPath);
+              setPath(mapLayer.locationPath);
+              locationFound = true;
+            }
+          });
+
+          if (!locationFound) {
+            setPath(''); // Clear the path if clicked outside any area
+          }
+        });
+      }
     })
     .catch((error) => console.error('Error loading areas:', error));
 };
