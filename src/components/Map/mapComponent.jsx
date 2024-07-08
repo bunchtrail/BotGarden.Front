@@ -50,7 +50,6 @@ function MapComponent() {
       });
     }
 
-    // Очищаем карту при размонтировании компонента
     return () => {
       if (map) {
         map.remove();

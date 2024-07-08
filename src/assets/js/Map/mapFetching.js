@@ -20,8 +20,7 @@ const customIcon = L.icon({
 });
 
 const fetchPlants = (map) => {
-  console.log('Fetching plants');
-  fetch('https://localhost:7076/api/Map/GetAll') // измените URL для использования прокси
+  fetch('https://localhost:7076/api/Map/GetAll')
     .then((response) => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -40,25 +39,19 @@ const fetchPlants = (map) => {
             <p>Описание: ${plant.note || 'Нет данных'}</p>
             <button id="delete">Удалить</button>
           </div>`;
-          console.log('Plant data:', plant);
           marker.bindPopup(popupContent);
-          marker._plantId = plant.plantId; // изменено с marker.plantId
+          marker._plantId = plant.plantId;
           marker.species = plant.species;
           marker.variety = plant.variety;
           marker.note = plant.note;
           drawnItems.addLayer(marker);
-        } else {
-          console.warn(
-            `Plant with ID ${plant.plantId} has invalid coordinates.`
-          );
         }
       });
     })
     .catch((error) => console.error('Error loading plants:', error));
 };
 
-const fetchAreas = (map) => {
-  console.log('Fetching areas');
+const fetchAreas = (map, mod, setPath) => {
   fetch('https://localhost:7076/api/Map/GetAllAreas')
     .then((response) => {
       if (!response.ok) {
@@ -67,57 +60,97 @@ const fetchAreas = (map) => {
       return response.json();
     })
     .then((data) => {
+      let currentMarker = null;
       data.forEach((area) => {
         if (
-          !area.locationId ||
-          !area.geometry ||
-          !area.geometry.match(/^POLYGON\(\(/)
+          area.locationId &&
+          area.geometry &&
+          area.geometry.match(/^POLYGON\(\(/)
         ) {
-          console.warn(`Invalid data for area: ${JSON.stringify(area)}`);
-          return;
-        }
-        try {
-          const polygon = WKT.parse(area.geometry);
-          if (polygon && polygon.type === 'Polygon') {
-            const latlngs = polygon.coordinates[0].map((coord) => [
-              coord[1],
-              coord[0],
-            ]);
-            const layer = L.polygon(latlngs).addTo(map);
-            layer.bindPopup(area.locationPath); // Используем LocationPath как имя
-            layer.options.areaId = area.locationId; // Устанавливаем areaId в options
-            console.log('Загружен areaId:', layer.options.areaId);
-            layer.locationPath = area.locationPath;
-            drawnItems.addLayer(layer);
-          } else {
-            console.warn(
-              `Invalid polygon type or coordinates for area with ID ${area.locationId}`
+          try {
+            const polygon = WKT.parse(area.geometry);
+            if (polygon && polygon.type === 'Polygon') {
+              const latlngs = polygon.coordinates[0].map((coord) => [
+                coord[1],
+                coord[0],
+              ]);
+              const layer = L.polygon(latlngs, { interactive: true }).addTo(
+                map
+              );
+
+              if (mod === 'marker') {
+                layer.on('click', (e) => {
+                  if (currentMarker) {
+                    map.removeLayer(currentMarker);
+                  }
+                  currentMarker = L.marker(e.latlng, {
+                    draggable: true,
+                    icon: customIcon,
+                  }).addTo(map);
+
+                  map.eachLayer((mapLayer) => {
+                    if (
+                      mapLayer instanceof L.Polygon &&
+                      mapLayer.getBounds().contains(e.latlng)
+                    ) {
+                      console.log('clicked at ', mapLayer.locationPath);
+                      setPath(mapLayer.locationPath);
+                    }
+                  });
+                });
+              } else if (mod === 'info') {
+                layer.bindPopup(area.locationPath);
+              }
+
+              layer.options.areaId = area.locationId;
+              layer.locationPath = area.locationPath;
+              drawnItems.addLayer(layer);
+            }
+          } catch (e) {
+            console.error(
+              `Error parsing WKT for area with ID ${area.locationId}: ${e}`
             );
           }
-        } catch (e) {
-          console.error(
-            `Error parsing WKT for area with ID ${area.locationId}:`,
-            e
-          );
         }
       });
     })
     .catch((error) => console.error('Error loading areas:', error));
 };
 
-function MapFetching({ mapRef }) {
+function MapFetching({ mapRef, mod, setPath, setLocationOptions }) {
   useEffect(() => {
     if (
       mapRef.current &&
       mapRef.current.leaflet_map &&
       !mapRef.current.loaded
     ) {
-      console.log('MapFetching useEffect triggered');
       fetchPlants(mapRef.current.leaflet_map);
-      fetchAreas(mapRef.current.leaflet_map);
-      mapRef.current.loaded = true; // Флаг для предотвращения повторной загрузки
+      fetchAreas(mapRef.current.leaflet_map, mod, setPath);
+      mapRef.current.loaded = true;
     }
-  }, [mapRef]);
+
+    const fetchLocations = async () => {
+      try {
+        const response = await fetch(
+          'https://localhost:7076/api/Map/GetAllAreas'
+        );
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        const locations = data.map((location) => ({
+          value: location.locationPath,
+          label: location.locationPath,
+        }));
+        console.log('Fetched locations:', locations);
+        setLocationOptions(locations);
+      } catch (error) {
+        console.error('Error loading locations:', error);
+      }
+    };
+
+    fetchLocations();
+  }, [mapRef, mod, setPath, setLocationOptions]);
 
   return null;
 }

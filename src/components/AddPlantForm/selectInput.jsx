@@ -1,8 +1,10 @@
-// selectInput.jsx
 import React from 'react';
 import PropTypes from 'prop-types';
 
 function SelectInput({ id, name, value, onChange, options }) {
+  console.log('SelectInput value:', value);
+  console.log('SelectInput options:', options);
+
   return (
     <select
       id={id}

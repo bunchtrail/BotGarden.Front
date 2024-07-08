@@ -33,8 +33,6 @@ export function addMapHandlers(mapRef, setLatitude, setLongitude, markerRef) {
     setLongitude(center.lng);
     console.log('Map moved. New center:', center);
   });
-
-  // Другие обработчики событий
 }
 
 export default addMapHandlers;

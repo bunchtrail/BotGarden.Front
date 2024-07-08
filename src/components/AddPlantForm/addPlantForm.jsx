@@ -1,25 +1,19 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import '../../assets/css/plantsForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import { FormContext } from '../../assets/js/FormContext';
-
-import { familyOptions, genusOptions, locationOptions } from './formOptions';
+import { familyOptions, genusOptions } from './formOptions';
 import FormFields from './FormFields';
 
 export default function AddPlantForm({ sectorId }) {
-  const { formState, handleInputChange, setLatitude, setLongitude } =
+  const { formState, handleInputChange, setLatitude, setLongitude, setPath } =
     useContext(FormContext);
   const [showMap, setShowMap] = useState(false);
 
   const toggleMap = () => {
     setShowMap(!showMap);
   };
-
-  useEffect(() => {
-    console.log('AddPlantForm mounted - setLatitude:', setLatitude);
-    console.log('AddPlantForm mounted - setLongitude:', setLongitude);
-  }, [setLatitude, setLongitude]);
 
   return (
     <div className="AddPlantContainer">
@@ -44,9 +38,9 @@ export default function AddPlantForm({ sectorId }) {
           handleInputChange={handleInputChange}
           setLatitude={setLatitude}
           setLongitude={setLongitude}
+          setPath={setPath}
           familyOptions={familyOptions}
           genusOptions={genusOptions}
-          locationOptions={locationOptions}
           toggleMap={toggleMap}
           showMap={showMap}
           sectorId={sectorId}

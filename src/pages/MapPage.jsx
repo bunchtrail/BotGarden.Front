@@ -16,6 +16,7 @@ function MapPage() {
   const [longitude, setLongitude] = useState(-0.09);
   const [mapMode, setMapMode] = useState('view');
   const mapRef = useRef(null);
+  const mod = 'info';
 
   useEffect(() => {
     console.log('MapPage useEffect triggered with mapMode:', mapMode);
@@ -66,7 +67,7 @@ function MapPage() {
         mapStyle={customMapStyle}
         mapRef={mapRef}
       />
-      <MapFetching mapRef={mapRef} />
+      <MapFetching mapRef={mapRef} mod={mod} />
       <AreaModal />
     </>
   );

@@ -1,10 +1,12 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useContext, useRef, useState, useEffect } from 'react';
 import FormRow from './formRow';
 import FormGroup from './formGroup';
 import TextInput from './textInput';
+import MapFetching from '../../assets/js/Map/mapFetching';
 import ToggleMapButton from './toggleMapButton';
 import MapComponent from '../../assets/js/Map/mapComponent';
 import SelectInput from './selectInput';
+import { FormContext } from '../../assets/js/FormContext';
 
 export default function FormFields({
   formState,
@@ -13,19 +15,34 @@ export default function FormFields({
   setLongitude,
   familyOptions,
   genusOptions,
-  locationOptions,
   toggleMap, // получение функции toggleMap
   showMap, // получение состояния showMap
-  sectorId,
 }) {
   const mapRef = useRef(null);
+  const mod = 'marker';
+  const [locationOptions, setLocationOptions] = useState([
+    { value: '', label: 'Нет данных' },
+  ]);
+
+  const { setPath } = useContext(FormContext);
 
   useEffect(() => {
-    console.log('FormState updated:', formState);
-  }, [formState]);
+    console.log(formState.LocationId, ' locationpathEffect');
+  }, [formState.LocationId]);
+
+  useEffect(() => {
+    console.log(formState.LocationId, ' locationpath');
+    console.log('locationOptions:', locationOptions);
+  }, [formState.LocationId, locationOptions]);
 
   return (
     <>
+      <MapFetching
+        mapRef={mapRef}
+        mod={mod}
+        setPath={setPath}
+        setLocationOptions={setLocationOptions}
+      />
       <FormRow>
         <FormGroup label="Инв_номер" htmlFor="InventorNumber" colSize={6}>
           <TextInput
@@ -99,8 +116,10 @@ export default function FormFields({
           <SelectInput
             id="LocationId"
             name="LocationId"
-            value={sectorId.toString()}
-            onChange={handleInputChange}
+            value={formState.LocationId}
+            onChange={(e) => {
+              setPath(e.target.value);
+            }}
             options={locationOptions}
           />
         </FormGroup>
@@ -127,7 +146,6 @@ export default function FormFields({
         <div style={{ width: '100%' }}>
           <ToggleMapButton toggleMap={toggleMap} showMap={showMap} />
           <div className={`map-container ${showMap ? 'show' : 'hide'}`}>
-            {/* Перенесем компонент карты сюда */}
             <MapComponent
               latitude={formState.Latitude}
               longitude={formState.Longitude}

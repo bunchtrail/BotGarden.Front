@@ -7,7 +7,7 @@ function SearchFilter() {
 
   const handleUpdate = () => {
     console.log('Update clicked');
-    const plantUpdates = []; // Соберите данные, которые хотите отправить на сервер
+    const plantUpdates = [];
     document.querySelectorAll('tr[data-plant-id]').forEach((row) => {
       const plantId = parseInt(row.getAttribute('data-plant-id'), 10);
       const formState = {};

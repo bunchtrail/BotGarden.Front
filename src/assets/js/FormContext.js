@@ -53,9 +53,23 @@ export function FormProvider({ children }) {
     }));
   }, []);
 
+  const setPath = useCallback((path) => {
+    console.log(path, ' !!!!!!!');
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      LocationId: path,
+    }));
+  }, []);
+
   const contextValue = useMemo(
-    () => ({ formState, handleInputChange, setLatitude, setLongitude }),
-    [formState, handleInputChange, setLatitude, setLongitude]
+    () => ({
+      formState,
+      handleInputChange,
+      setLatitude,
+      setLongitude,
+      setPath,
+    }),
+    [formState, handleInputChange, setLatitude, setLongitude, setPath]
   );
 
   return (

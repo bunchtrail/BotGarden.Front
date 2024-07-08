@@ -8,6 +8,7 @@ import botGardenMap from '../../images/botGardenMapCut.png';
 export function initializeMap(
   latitude,
   longitude,
+  setPath,
   setLatitude,
   setLongitude,
   allowMarker,
@@ -17,21 +18,16 @@ export function initializeMap(
   mapContainerRef
 ) {
   if (!mapContainerRef.current) {
-    console.error('mapContainerRef.current is not defined');
     return null;
   }
 
   if (mapContainerRef.current && mapContainerRef.current.leaflet_map) {
-    console.log('Returning existing map instance');
     if (mapContainerRef.current.leaflet_map instanceof L.Map) {
-      console.log('Existing map instance is valid');
       return mapContainerRef.current.leaflet_map;
     }
-    console.error('Existing map instance is not a valid L.Map');
     return null;
   }
 
-  console.log('Creating new map instance');
   const map = L.map(mapContainerRef.current, {
     crs: L.CRS.Simple,
     minZoom: -2,
@@ -48,8 +44,6 @@ export function initializeMap(
 
   map.fitBounds(bounds);
 
-  console.log('Map created:', map);
-
   const defaultIcon = L.icon({
     iconRetinaUrl: markerIcon2x,
     iconUrl: markerIcon,
@@ -63,7 +57,6 @@ export function initializeMap(
   mapContainerRef.current.defaultIcon = defaultIcon;
   mapContainerRef.current.leaflet_map = map;
 
-  console.log('Returning newly created map instance:', map);
   return map;
 }
 

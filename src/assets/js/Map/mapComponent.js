@@ -10,6 +10,7 @@ function MapComponent({
   longitude,
   setLatitude,
   setLongitude,
+  setPath,
   allowMarker,
   allowArea,
   allowEdit,
@@ -19,31 +20,19 @@ function MapComponent({
 }) {
   const mapContainerRef = useRef(null);
 
-  console.log('MapComponent props:', {
-    latitude,
-    longitude,
-    setLatitude,
-    setLongitude,
-    allowMarker,
-    allowArea,
-    allowEdit,
-    allowDelete,
-    mapRef,
-  });
-
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
     const mapExists =
       mapRef.current && mapRef.current.leaflet_map instanceof L.Map;
     if (!mapExists) {
-      console.log('Initializing map...');
       mapRef.current = {
         leaflet_map: initializeMap(
           latitude,
           longitude,
           setLatitude,
           setLongitude,
+          setPath,
           allowMarker,
           allowArea,
           allowEdit,
@@ -51,41 +40,38 @@ function MapComponent({
           mapContainerRef
         ),
       };
-    } else {
-      console.log('Using existing map instance');
     }
 
     const map = mapRef.current.leaflet_map;
 
-    map.off('click').on('click', function (e) {
+    map.on('click', function (e) {
+      if (!allowMarker) return;
+
       const { lat, lng } = e.latlng;
       setLatitude(lat);
       setLongitude(lng);
-      console.log('Map clicked at:', lat, lng);
 
-      if (allowMarker) {
-        if (mapContainerRef.current.marker) {
-          map.removeLayer(mapContainerRef.current.marker);
-        }
-
-        const clickMarker = L.marker([lat, lng], {
-          draggable: true,
-          icon: mapContainerRef.current.defaultIcon,
-        }).addTo(map);
-
-        clickMarker.on('dragend', function (event) {
-          const position = event.target.getLatLng();
-          setLatitude(position.lat);
-          setLongitude(position.lng);
-        });
-
-        clickMarker.on('dblclick', function () {
-          map.removeLayer(clickMarker);
-          mapContainerRef.current.marker = null;
-        });
-
-        mapContainerRef.current.marker = clickMarker;
+      if (mapContainerRef.current.marker) {
+        map.removeLayer(mapContainerRef.current.marker);
       }
+
+      const clickMarker = L.marker([lat, lng], {
+        draggable: true,
+        icon: mapContainerRef.current.defaultIcon,
+      }).addTo(map);
+
+      clickMarker.on('dragend', function (event) {
+        const position = event.target.getLatLng();
+        setLatitude(position.lat);
+        setLongitude(position.lng);
+      });
+
+      clickMarker.on('dblclick', function () {
+        map.removeLayer(clickMarker);
+        mapContainerRef.current.marker = null;
+      });
+
+      mapContainerRef.current.marker = clickMarker;
     });
   }, [
     latitude,
@@ -96,6 +82,7 @@ function MapComponent({
     allowArea,
     allowEdit,
     allowDelete,
+    setPath,
     mapRef,
   ]);
 
