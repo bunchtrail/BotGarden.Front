@@ -3,9 +3,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Button({ onClick, iconClass, children }) {
+function Button({ onClick, iconClass, children, className }) {
   return (
-    <button type="button" className="btn btn-primary" onClick={onClick}>
+    <button type="button" className={className} onClick={onClick}>
       <i className={iconClass} /> {children}
     </button>
   );

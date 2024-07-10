@@ -37,6 +37,16 @@ body {
   background-color: #3cb371;
 }
 
+.btn-primary1 {
+  background-color: #e20606;
+}
+.btn-primary1:hover {
+  background-color: #bf0505; /* Темнее оттенок красного для эффекта при наведении */
+}
+
 .btn-primary:hover {
   background-color: #2e8b57;
+}
+.btn-primary:hover, .btn-primary1:hover {
+  color: #ffffff; 
 }

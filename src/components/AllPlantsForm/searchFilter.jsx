@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-param-reassign */
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import debounce from 'lodash/debounce';
@@ -19,42 +20,44 @@ function SearchFilter() {
         setTimeout(() => {
           const cachedData = [];
           document.querySelectorAll('tr[data-plant-id]').forEach((row) => {
-            const rowData = [];
+            const rowData = {};
             row.querySelectorAll('input').forEach((input) => {
-              rowData.push(input.value.toLowerCase());
+              rowData[input.name] = input.value.toLowerCase();
             });
             cachedData.push({ row, rowData });
           });
           setPlantDataCache(cachedData);
           cacheInitialized.current = true;
           console.log('Кэшированные данные:', cachedData);
-        }, 500);
+        }, 500); // Задержка в 500 миллисекунд
       };
 
       cacheDataWithDelay();
 
-      debouncedHandleSearch.current = debounce((searchValue, cache) => {
-        const startTime = performance.now();
-        let iterations = 0;
+      // Создаем дебаунсированную версию handleSearch
+      debouncedHandleSearch.current = debounce(
+        (searchValue, searchCategory, cache) => {
+          if (!Array.isArray(cache)) return; // Убедитесь, что cache является массивом
+          const startTime = performance.now();
+          let iterations = 0; // Инициализация счетчика итераций
 
-        cache.forEach(({ row, rowData }) => {
-          const rowMatches = rowData.some((cellValue) => {
-            iterations += 1;
-            return cellValue.includes(searchValue);
+          cache.forEach(({ row, rowData }) => {
+            iterations += 1; // Увеличение счетчика итераций
+            const cellValue = rowData[searchCategory];
+            const rowMatches = cellValue.includes(searchValue);
+            row.style.display = rowMatches ? '' : 'none';
           });
 
-          row.style.display = rowMatches ? '' : 'none';
-        });
+          const endTime = performance.now();
+          const duration = endTime - startTime;
 
-        const endTime = performance.now();
-        const duration = endTime - startTime;
-
-        console.log(`Поиск занял ${duration.toFixed(2)} миллисекунд`);
-        console.log(`Количество итераций: ${iterations}`); // Вывод количества итераций
-      }, 300);
+          console.log(`Поиск занял ${duration.toFixed(2)} миллисекунд`);
+          console.log(`Количество итераций: ${iterations}`); // Вывод количества итераций
+        },
+        300
+      );
     }
 
-    // Очищаем дебаунсированную функцию при размонтировании компонента
     return () => {
       if (debouncedHandleSearch.current) {
         debouncedHandleSearch.current.cancel();
@@ -98,7 +101,11 @@ function SearchFilter() {
     setSearchField(searchValue);
     console.log('Поисковое значение:', searchValue);
     if (debouncedHandleSearch.current) {
-      debouncedHandleSearch.current(searchValue, plantDataCache);
+      debouncedHandleSearch.current(
+        searchValue,
+        searchCategory,
+        plantDataCache
+      );
     }
   };
 
@@ -111,33 +118,33 @@ function SearchFilter() {
         onChange={(e) => setSearchCategory(e.target.value)}
       >
         <option value="PlantId">ID</option>
-        <option value="InventorNumber">Инв_номер</option>
-        <option value="FamilyName">Семейство</option>
-        <option value="GenusName">Род</option>
-        <option value="Species">Вид</option>
-        <option value="Synonyms">Синонимы</option>
-        <option value="Variety">Сорт</option>
-        <option value="Form">Форма</option>
-        <option value="SectorName">Местоположение на территории сада</option>
-        <option value="PlantOrigin">Происхождение образца</option>
-        <option value="NaturalHabitat">Природный ареал</option>
-        <option value="Determined">Определитель</option>
-        <option value="EcologyBiology">Экология и биология вида</option>
-        <option value="EconomicUse">Хозяйственное применение</option>
-        <option value="DateOfPlanting">Год посадки</option>
-        <option value="Originator">Оригинатор</option>
-        <option value="Date">Год</option>
-        <option value="Country">Страна</option>
-        <option value="ProtectionStatus">Охраняемый статус вида</option>
-        <option value="HerbariumPresence">Наличие гербария</option>
-        <option value="FilledOut">Заполнял</option>
-        <option value="ImagePath">Иллюстрация</option>
-        <option value="HerbariumDuplicate">
+        <option value="inventorNumber">Инв_номер</option>
+        <option value="familyName">Семейство</option>
+        <option value="genusName">Род</option>
+        <option value="species">Вид</option>
+        <option value="synonyms">Синонимы</option>
+        <option value="variety">Сорт</option>
+        <option value="form">Форма</option>
+        <option value="sectorName">Местоположение на территории сада</option>
+        <option value="plantOrigin">Происхождение образца</option>
+        <option value="naturalHabitat">Природный ареал</option>
+        <option value="determined">Определитель</option>
+        <option value="ecologyBiology">Экология и биология вида</option>
+        <option value="economicUse">Хозяйственное применение</option>
+        <option value="dateOfPlanting">Год посадки</option>
+        <option value="originator">Оригинатор</option>
+        <option value="date">Год</option>
+        <option value="country">Страна</option>
+        <option value="protectionStatus">Охраняемый статус вида</option>
+        <option value="herbariumPresence">Наличие гербария</option>
+        <option value="filledOut">Заполнял</option>
+        <option value="imagePath">Иллюстрация</option>
+        <option value="herbariumDuplicate">
           Наличие дубликатов в других гербариях
         </option>
-        <option value="Note">Состояние образца</option>
-        <option value="Latitude">Широта</option>
-        <option value="Longitude">Долгота</option>
+        <option value="note">Состояние образца</option>
+        <option value="latitude">Широта</option>
+        <option value="longitude">Долгота</option>
       </select>
 
       <input
@@ -150,12 +157,16 @@ function SearchFilter() {
       />
 
       <div className="button-container">
-        <ButtonClick onClick={handleUpdate} iconClass="fas fa-save">
-          Сохранить
-        </ButtonClick>
-        <ButtonClick onClick={handleDelete} iconClass="fas fa-trash-alt">
-          Удалить
-        </ButtonClick>
+        <ButtonClick
+          onClick={handleUpdate}
+          iconClass="fas fa-save"
+          className="btn btn-primary"
+        />
+        <ButtonClick
+          onClick={handleDelete}
+          iconClass="fas fa-trash-alt"
+          className="btn btn-primary1"
+        />
       </div>
     </div>
   );

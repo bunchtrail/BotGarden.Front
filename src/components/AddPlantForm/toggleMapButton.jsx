@@ -3,7 +3,11 @@ import Button from '../Buttons/Button/ButtonClick';
 
 function ToggleMapButton({ toggleMap, showMap }) {
   return (
-    <Button onClick={toggleMap} iconClass="fas fa-map">
+    <Button
+      onClick={toggleMap}
+      iconClass="fas fa-map"
+      className="btn btn-primary"
+    >
       {showMap ? 'Скрыть карту' : 'Показать карту'}
     </Button>
   );
