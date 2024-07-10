@@ -12,14 +12,12 @@ export const drawnItems = new L.FeatureGroup();
 
 export function disableOtherModes(map) {
   if (drawControl) {
-    console.log('Отключение текущего режима');
     map.removeControl(drawControl);
     drawControl = null;
   }
 }
 
 export function enableDrawing(map, mode) {
-  console.log('Включение режима рисования', mode);
   disableOtherModes(map);
   if (!map.hasLayer(drawnItems)) {
     map.addLayer(drawnItems);
@@ -50,7 +48,6 @@ export function enableDrawing(map, mode) {
 }
 
 export function enableEditing(map) {
-  console.log('Включение режима редактирования');
   disableOtherModes(map);
   if (!map.hasLayer(drawnItems)) {
     map.addLayer(drawnItems);
@@ -76,13 +73,11 @@ export function enableEditing(map) {
   });
   map.addControl(drawControl);
   map.on('draw:edited', (event) => {
-    console.log('Редактирование области:', event);
     handleEditArea(event, map); // Добавляем обработчик для редактирования областей
   });
 }
 
 export function enableDeleting(map) {
-  console.log('Включение режима удаления');
   disableOtherModes(map);
   if (!map.hasLayer(drawnItems)) {
     map.addLayer(drawnItems);
@@ -103,7 +98,6 @@ export function enableDeleting(map) {
   });
   map.addControl(drawControl);
   map.on('draw:deleted', (event) => {
-    console.log('Удаление области:', event);
     handleDeleteArea(event, map); // Добавляем обработчик для удаления областей
   });
 }

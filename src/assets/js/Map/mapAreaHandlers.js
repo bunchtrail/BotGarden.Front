@@ -7,35 +7,21 @@ import { drawnItems } from './mapDrawing';
 
 function removeLayerAndUpdateMap(layer, map) {
   if (!map) {
-    console.error('Map object is undefined');
-    return;
-  }
-  console.log('Removing layer from drawnItems and map:', layer);
-  if (drawnItems.hasLayer(layer)) {
-    drawnItems.removeLayer(layer);
-    console.log('Layer removed from drawnItems');
-  } else {
-    console.warn('Layer not found in drawnItems');
-  }
-  if (map.hasLayer(layer)) {
-    map.removeLayer(layer);
-    console.log('Layer removed from map');
-  } else {
-    console.warn('Layer not found on map');
+    if (!map) {
+      throw new Error('Map object is undefined');
+    }
+    if (drawnItems.hasLayer(layer)) {
+      drawnItems.removeLayer(layer);
+    }
+    if (map.hasLayer(layer)) {
+      map.removeLayer(layer);
+    }
   }
   map.invalidateSize();
-  console.log('Layer removed and map updated');
 }
 
 export default function handleAddArea(layer, map) {
   const coordinates = layer.getLatLngs()[0];
-
-  if (coordinates.length < 3) {
-    alert(
-      'Недостаточно точек для создания полигона. Необходимо как минимум 3 точки.'
-    );
-    return;
-  }
 
   const wkt = `POLYGON((${coordinates.map((coord) => `${coord.lng} ${coord.lat}`).join(',')},${coordinates[0].lng} ${coordinates[0].lat}))`;
 
@@ -46,27 +32,27 @@ export default function handleAddArea(layer, map) {
   modal.style.display = 'block';
   document.getElementById('geometryWKT').value = wkt;
 
-  span.onclick = function () {
+  function spanOnClick() {
     modal.style.display = 'none';
     removeLayerAndUpdateMap(layer, map);
-  };
+  }
+  span.onclick = spanOnClick;
 
-  window.onclick = function (event) {
+  function windowOnClick(event) {
     if (event.target === modal) {
       modal.style.display = 'none';
       removeLayerAndUpdateMap(layer, map);
     }
-  };
+  }
+  window.onclick = windowOnClick;
 
-  form.onsubmit = function (e) {
+  function formOnSubmit(e) {
     e.preventDefault();
     const areaName = document.getElementById('areaName').value;
     const newArea = {
       LocationPath: areaName,
       Geometry: wkt,
     };
-
-    console.log('Отправка данных на сервер:', JSON.stringify(newArea));
 
     fetch('https://localhost:7076/api/Map/AddArea', {
       method: 'POST',
@@ -84,26 +70,21 @@ export default function handleAddArea(layer, map) {
         return response.json();
       })
       .then((data) => {
-        console.log('Область сохранена', data);
         layer.bindPopup(areaName).openPopup();
         layer.options.areaId = data.locationId;
         drawnItems.addLayer(layer);
         modal.style.display = 'none';
       })
-      .catch((error) => console.error('Ошибка при сохранении области:', error));
-  };
+      .catch((error) => {
+        throw new Error(`Ошибка при сохранении области: ${error}`);
+      });
+  }
+  form.onsubmit = formOnSubmit;
 }
 
 export function handleEditArea(event, map) {
-  event.layers.eachLayer(function (layer) {
+  event.layers.eachLayer((layer) => {
     const coordinates = layer.getLatLngs()[0];
-    console.log('Редактирование области:', layer.options.areaId, coordinates);
-    if (coordinates.length < 3) {
-      alert(
-        'Недостаточно точек для редактирования полигона. Необходимо как минимум 3 точки.'
-      );
-      return;
-    }
 
     const wkt = `POLYGON((${coordinates.map((coord) => `${coord.lng} ${coord.lat}`).join(',')},${coordinates[0].lng} ${coordinates[0].lat}))`;
     const updatedArea = {
@@ -111,10 +92,7 @@ export function handleEditArea(event, map) {
       Geometry: wkt,
     };
 
-    console.log('Удаление старого слоя:', layer.options.areaId);
     removeLayerAndUpdateMap(layer, map);
-
-    console.log('Обновление данных на сервере:', JSON.stringify(updatedArea));
 
     fetch('https://localhost:7076/api/Map/UpdateArea', {
       method: 'PUT',
@@ -132,25 +110,22 @@ export function handleEditArea(event, map) {
         return response.json();
       })
       .then((data) => {
-        console.log('Область обновлена', data);
-
         const latlngs = coordinates.map((coord) => [coord.lat, coord.lng]);
 
         const polygon = L.polygon(latlngs, {
           areaId: data.locationId,
         }).addTo(drawnItems);
         polygon.bindPopup(data.locationPath).openPopup();
-
-        console.log('Новый слой добавлен с areaId:', polygon.options.areaId);
       })
-      .catch((error) => console.error('Ошибка при обновлении области:', error));
+      .catch((error) => {
+        throw new Error('Ошибка при обновлении области:', error);
+      });
   });
 }
 
 export function handleDeleteArea(event, map) {
-  event.layers.eachLayer(function (layer) {
+  event.layers.eachLayer((layer) => {
     const { areaId } = layer.options;
-    console.log('Удаление области с ID:', areaId);
 
     fetch(`https://localhost:7076/api/Map/DeleteArea/${areaId}`, {
       method: 'DELETE',
@@ -161,10 +136,11 @@ export function handleDeleteArea(event, map) {
             throw new Error(text);
           });
         }
-        console.log('Область удалена');
-        removeLayerAndUpdateMap(layer, map); // Удаляем слой после успешного запроса
+        removeLayerAndUpdateMap(layer, map);
       })
-      .catch((error) => console.error('Ошибка при удалении области:', error));
+      .catch((error) => {
+        throw new Error(`Ошибка при удалении области: ${error}`);
+      });
   });
 }
 
@@ -172,19 +148,11 @@ export function handleDeletePlantsInArea(layer, map) {
   const bounds = layer.getBounds();
   const markersToRemove = [];
 
-  drawnItems.eachLayer(function (marker) {
+  drawnItems.eachLayer((marker) => {
     if (marker instanceof L.Marker && bounds.contains(marker.getLatLng())) {
-      console.log(
-        'Plant ID:',
-        marker._plantId,
-        'Type:',
-        typeof marker._plantId
-      );
       markersToRemove.push(marker._plantId);
     }
   });
-
-  console.log('Markers to remove:', markersToRemove);
 
   if (markersToRemove.length > 0) {
     fetch('https://localhost:7076/api/Map/DeletePlantsInArea', {
@@ -200,19 +168,18 @@ export function handleDeletePlantsInArea(layer, map) {
             throw new Error(text);
           });
         }
-        console.log('Растения удалены');
         markersToRemove.forEach((id) => {
-          drawnItems.eachLayer(function (marker) {
+          drawnItems.eachLayer((marker) => {
             if (marker instanceof L.Marker && marker._plantId === id) {
               map.removeLayer(marker);
             }
           });
         });
       })
-      .catch((error) => console.error('Ошибка при удалении растений:', error));
+      .catch((error) => {
+        throw new Error(`Ошибка при удалении растений: ${error}`);
+      });
   }
 
   map.removeLayer(layer);
-  // Сбрасываем режим после завершения операции
-  // currentMode = null;
 }

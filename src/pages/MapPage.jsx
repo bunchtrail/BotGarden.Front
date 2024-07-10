@@ -19,9 +19,7 @@ function MapPage() {
   const mod = 'info';
 
   useEffect(() => {
-    console.log('MapPage useEffect triggered with mapMode:', mapMode);
     if (mapRef.current && mapRef.current.leaflet_map) {
-      console.log('Applying map mode:', mapMode);
       if (mapRef.current.leaflet_map instanceof L.Map) {
         switch (mapMode) {
           case 'addArea':
@@ -40,7 +38,7 @@ function MapPage() {
             disableOtherModes(mapRef.current.leaflet_map);
         }
       } else {
-        console.error('MapRef is not an instance of L.Map');
+        throw new Error('MapRef is not an instance of L.Map');
       }
     }
   }, [mapMode, mapRef]);

@@ -7,5 +7,7 @@
   "trailingComma": "es5",
   "bracketSpacing": true,
   "arrowParens": "always",
-  "endOfLine": "crlf"
+  "endOfLine": "crlf",
+  "jsxBracketSameLine": false,
+  "jsxSingleQuote": false
 }

@@ -22,7 +22,7 @@ export function PlantsProvider({ children, sectorId }) {
       const data = await response.json();
       setPlants(data);
     } catch (error) {
-      console.error('An error occurred while fetching the plants:', error);
+      throw new Error('An error occurred while fetching the plants:', error);
     }
   }, [sectorId]);
 
@@ -52,14 +52,38 @@ export function PlantsProvider({ children, sectorId }) {
           });
           setPlants(updatedPlants);
         } else {
-          console.error('Error updating plants:', result.message);
+          throw new Error('Error updating plants:', result.message);
         }
       } catch (error) {
-        console.error('An error occurred while updating the plants:', error);
+        throw new Error('An error occurred while updating the plants:', error);
       }
     },
     [plants]
   );
+
+  const deletePlants = useCallback(async (plantIds) => {
+    try {
+      const responses = await Promise.all(
+        plantIds.map((id) =>
+          fetch(`https://localhost:7076/api/dendrology/delete/${id}`, {
+            method: 'DELETE',
+          })
+        )
+      );
+
+      const success = responses.every((response) => response.ok);
+
+      if (success) {
+        setPlants((prevPlants) =>
+          prevPlants.filter((plant) => !plantIds.includes(plant.plantId))
+        );
+      } else {
+        throw new Error('Error deleting plants');
+      }
+    } catch (error) {
+      throw new Error('An error occurred while deleting the plants:', error);
+    }
+  }, []);
 
   useEffect(() => {
     fetchPlants();
@@ -69,8 +93,9 @@ export function PlantsProvider({ children, sectorId }) {
     () => ({
       plants,
       updatePlants,
+      deletePlants,
     }),
-    [plants, updatePlants]
+    [plants, updatePlants, deletePlants]
   );
 
   return (

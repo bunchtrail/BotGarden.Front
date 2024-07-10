@@ -2,7 +2,7 @@ import React from 'react';
 
 function InputField({ value, name, onChange, disabled }) {
   return (
-    <td>
+    <td data-category={name}>
       <input
         type="text"
         className="input-field"

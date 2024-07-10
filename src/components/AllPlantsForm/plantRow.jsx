@@ -1,11 +1,28 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import InputField from './inputField';
+import '../../assets/css/plantsTable.css';
 
-function PlantRow({ plant, handleInputChange }) {
+function PlantRow({ plant, handleInputChange, handleRowSelect, isSelected }) {
   return (
-    <tr key={plant.plantId} data-plant-id={plant.plantId}>
+    <tr
+      key={plant.plantId}
+      data-plant-id={plant.plantId}
+      className={isSelected ? 'selected' : ''}
+    >
       <td>
-        <i className="fas fa-check select-row-icon" />
+        <i
+          className="fas fa-check select-row-icon"
+          onClick={() => handleRowSelect(plant.plantId, !isSelected)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleRowSelect(plant.plantId, !isSelected);
+            }
+          }}
+          role="button"
+          tabIndex="0"
+          aria-pressed={isSelected}
+        />
       </td>
       <InputField value={plant.plantId || ''} name="PlantId" disabled />
       <InputField

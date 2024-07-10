@@ -1,99 +1,137 @@
+.table-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
 .table-responsive {
-    overflow-x: auto;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 95%;
+}
+
+.table-responsive::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.table-responsive table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #fff;
+  min-width: 1000px;
+}
+
+.table-responsive th, .table-responsive td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table-responsive th {
+  background-color: #f5f5f5;
+  color: #333;
+  font-weight: bold;
+}
+
+.table-responsive tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table-responsive tr:hover {
+  background-color: #f1f1f1;
+}
+
+.table-responsive tr.selected {
+  background-color: #d1e7fd;
+}
+
+.table-responsive td input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-right: 10px;
+}
+
+.table-responsive td button {
+  padding: 5px 10px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.table-responsive td button:hover {
+  background-color: #0056b3;
+}
+
+.table-responsive td input[type="text"],
+.table-responsive td input[type="number"],
+.table-responsive td input[type="email"] {
+  width: 100%;
+  min-width: 80px;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.table-responsive td input[type="text"]:focus,
+.table-responsive td input[type="number"]:focus,
+.table-responsive td input[type="email"]:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Анимации для плавного появления и исчезновения строк */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    height: 0;
   }
-  
-  .table {
-    width: 100%;
-    margin-bottom: 1rem;
-    color: #212529;
-    border-collapse: collapse;
+  to {
+    opacity: 1;
+    height: auto;
   }
-  
-  .table-hover tbody tr:hover {
-    background-color: #f5f5f5;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    height: auto;
   }
-  
-  .table-fixed-header {
-    position: relative;
-    overflow: hidden;
+  to {
+    opacity: 0;
+    height: 0;
   }
-  
-  .table-fixed-header thead {
-    position: sticky;
-    top: 0;
-    background-color: #343a40;
-    color: #fff;
-    z-index: 1;
-  }
-  
-  .thead-dark th {
-    background-color: #343a40;
-    color: #fff;
-    padding: 10px; /* Увеличенные отступы */
-    text-align: left;
-    border-bottom: 2px solid #dee2e6;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 14px; /* Уменьшенный размер шрифта */
-  }
-  
-  .tbody tr {
-    background-color: #fff;
-  }
-  
-  .tbody td {
-    padding: 10px; /* Увеличенные отступы */
-    border-top: 1px solid #dee2e6;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 14px; /* Уменьшенный размер шрифта */
-  }
-  
-  .input-field {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ced4da;
-    border-radius: 3px;
-    box-sizing: border-box;
-    min-width: 100px;
-    font-size: 14px; /* Уменьшенный размер шрифта */
-  }
-  
-  .select-all-icon, .select-row-icon {
-    color: #6c757d;
-    cursor: pointer;
-  }
-  
-  .select-all-icon:hover, .select-row-icon:hover {
-    color: #343a40;
-  }
-  
-  .checkbox-field {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  @media (max-width: 768px) {
-    .table {
-      display: block;
-    }
-  
-    .thead-dark, .tbody, .tr, .td, .th {
-      display: block;
-    }
-  
-    .thead-dark {
-      float: left;
-    }
-  
-    .tbody {
-      width: auto;
-      position: relative;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-  }
-  
+}
+
+.fade-in {
+  display: table-row;
+  animation: fadeIn 0.5s forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.5s forwards;
+  height: 0;
+  opacity: 0;
+}

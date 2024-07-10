@@ -48,7 +48,9 @@ const fetchPlants = (map) => {
         }
       });
     })
-    .catch((error) => console.error('Error loading plants:', error));
+    .catch((error) => {
+      throw new Error('Error loading plants:', error);
+    });
 };
 
 const fetchAreas = (map, mod, setPath) => {
@@ -93,7 +95,6 @@ const fetchAreas = (map, mod, setPath) => {
                       mapLayer instanceof L.Polygon &&
                       mapLayer.getBounds().contains(e.latlng)
                     ) {
-                      console.log('clicked at ', mapLayer.locationPath);
                       setPath(mapLayer.locationPath);
                     }
                   });
@@ -107,6 +108,7 @@ const fetchAreas = (map, mod, setPath) => {
               drawnItems.addLayer(layer);
             }
           } catch (e) {
+            // eslint-disable-next-line no-console
             console.error(
               `Error parsing WKT for area with ID ${area.locationId}: ${e}`
             );
@@ -114,7 +116,6 @@ const fetchAreas = (map, mod, setPath) => {
         }
       });
 
-      // Add click event to the map itself
       if (mod === 'marker') {
         map.on('click', (e) => {
           if (currentMarker) {
@@ -132,19 +133,20 @@ const fetchAreas = (map, mod, setPath) => {
               mapLayer instanceof L.Polygon &&
               mapLayer.getBounds().contains(e.latlng)
             ) {
-              console.log('clicked at ', mapLayer.locationPath);
               setPath(mapLayer.locationPath);
               locationFound = true;
             }
           });
 
           if (!locationFound) {
-            setPath(''); // Clear the path if clicked outside any area
+            setPath('');
           }
         });
       }
     })
-    .catch((error) => console.error('Error loading areas:', error));
+    .catch((error) => {
+      throw new Error('Error loading areas:', error);
+    });
 };
 
 function MapFetching({ mapRef, mod, setPath, setLocationOptions }) {
@@ -172,14 +174,13 @@ function MapFetching({ mapRef, mod, setPath, setLocationOptions }) {
           value: location.locationPath,
           label: location.locationPath,
         }));
-        console.log('Fetched locations:', locations);
         setLocationOptions(locations);
       } catch (error) {
-        console.error('Error loading locations:', error);
+        throw new Error('Error loading locations:', error);
       }
     };
 
-    fetchLocations();
+    if (mod === 'marker') fetchLocations();
   }, [mapRef, mod, setPath, setLocationOptions]);
 
   return null;
